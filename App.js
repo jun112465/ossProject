@@ -1,62 +1,55 @@
-//to use JSX
-import React, {useState} from 'react';
-//to use components
-import { Text, View, StyleSheet, Button} from 'react-native';
+import * as React from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const styles = StyleSheet.create({
-    center: {
-        alignItems: 'center',
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
-
-const Greeting = (props) => {
-    return (
-        <View style={styles.center}>
-            <Text>Hello {props.name}</Text>
-        </View>
-    )
-}
-
-const LotsOfGreetings = ()=>{
-    return (
-        <View style={[styles.center, {top:50}]}>
-            <Greeting name='JunYeob'/>
-            <Greeting name='JunSung'/>
-            <Greeting name='YoonSung'/>
-        </View>
-    )
-}
-
-const HelloWorldApp = () => {
+function HomeScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-      <Text>Hello, world!</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home!</Text>
     </View>
-  )
+  );
 }
 
-const App = ()=>{
-    const [count, setCount] = useState(0);
-
-    return (
-        <View style={styles.container}>
-            <Text>You clicked {count} times</Text>
-            <Button 
-                onPress={()=>setCount(count + 1)}
-                title="click me!"
-            />
-        </View>
-    )
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
 }
-// export default LotsOfGreetings;
-export default App;
+
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
+  return (
+      <Tab.Navigator
+          screenOptions={{ headerShown: false }}
+      >
+          <Tab.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                  tabBarIcon: ({ size, color }) => (<Icon name={"Home"} color={color} size={size} />)
+              }}
+          />
+
+          <Tab.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                  tabBarIcon: ({ size, color }) => (<Icon name={"User"} color={color} size={size} />)
+              }}
+          />
+      </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
+  );
+}
