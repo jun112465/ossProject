@@ -22,7 +22,7 @@ function SettingsScreen() {
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+function MyTabs(size, color) {
   return (
       <Tab.Navigator
           screenOptions={{ headerShown: false }}
@@ -31,7 +31,7 @@ function MyTabs() {
               name="Home"
               component={HomeScreen}
               options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"Home"} color={color} size={size} />)
+                  tabBarIcon: ({ size, color }) => (<Icon name={"glass"} color={color} size={size} />)
               }}
           />
 
@@ -39,7 +39,7 @@ function MyTabs() {
               name="Settings"
               component={SettingsScreen}
               options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"User"} color={color} size={size} />)
+                  tabBarIcon: ({ size, color }) => (<Icon name={"music"} color={color} size={size} />)
               }}
           />
       </Tab.Navigator>
@@ -49,7 +49,7 @@ function MyTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <MyTabs />
+      <MyTabs/>
     </NavigationContainer>
   );
 }
