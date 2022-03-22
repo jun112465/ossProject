@@ -31,7 +31,7 @@ function MyTabs(size, color) {
               name="Home"
               component={HomeScreen}
               options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"glass"} color={color} size={size} />)
+                  tabBarIcon: ({ size, color }) => (<Icon name={"home"} color={color} size={size} />)
               }}
           />
 
@@ -39,7 +39,7 @@ function MyTabs(size, color) {
               name="Settings"
               component={SettingsScreen}
               options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"music"} color={color} size={size} />)
+                  tabBarIcon: ({ size, color }) => (<Icon name={"user"} color={color} size={size} />)
               }}
           />
       </Tab.Navigator>
