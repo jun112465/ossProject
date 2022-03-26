@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import {StyleSheet, Text, View, Image, TextInput, TouchableOpacity} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// async-storage doc
+// https://react-native-async-storage.github.io/async-storage/docs/install/
 
 export default function App(){
   const [name, setName] = useState();
