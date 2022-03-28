@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View, Image, TextInput} from 'react-native';
-import CustomButton from './CustomButton';
+import CustomButton from "../components/CustomButton"
 
 export default ()=> {
     return (
