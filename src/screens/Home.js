@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image} from 'react-native'
 import CustomButton from '../components/CustomButton'
 
 // https://yuddomack.tistory.com/entry/6React-Native-Navigation-%EA%B8%B0%EC%B4%88-1%EB%B6%80-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0?category=754156
-const Home = ()=>{
+const Home = ({navigation})=>{
   return (
     <View style={styles.container}>
       <View style={styles.header}><Text>header</Text></View>
@@ -19,13 +19,13 @@ const Home = ()=>{
           buttonColor={'#000'}
           title={'로그인'}
           titleColor={'#fff'}
-          onPress={()=>alert('로그인 버튼')}
+          onPress={() => navigation.navigate('Login')}
         />
         <CustomButton
           buttonColor={'#444'}
           title={'회원가입'}
           titleColor={'#fff'}
-          onPress={() => alert('회원가입 버튼')}
+          onPress={() => navigation.navigate('Sign Up')}
         />
       </View>
     </View> 
