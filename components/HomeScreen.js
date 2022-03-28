@@ -19,7 +19,7 @@ const DATA = [
 
 const Item = ({title }) => (
     <View style={styles.item}>
-        <TouchableOpacity onPress={() => { Alert.alert('Hi') }}>
+        <TouchableOpacity onPress={() => { alert('Hi') }}>
             <Text style={styles.title}>제목</Text>
             <Text style={styles.content}>{title}</Text>
         </TouchableOpacity>
@@ -44,11 +44,11 @@ const HomeScreen = () => {
                 <Text>Testing</Text>
                 <Button
                     title="Press me"
-                    onPress={() => Alert.alert('Simple Button pressed')}
+                    onPress={() => alert('Simple Button pressed')}
                 />
-                <TouchableOpacity onPress={() => { Alert.alert('Hi') }}>
+                {/* <TouchableOpacity onPress={() => { alert('Hi') }}>
                     <Text>testing onPress</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
         </SafeAreaView>
