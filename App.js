@@ -5,22 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './components/HomeScreen';
 import SettingsScreen from './components/SettingsScreen';
-// function homeScreen() {
-//   return (
-//       <HomeScreen />
-// //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-// //       <Text>Home!</Text>
-// //     </View>
-//   );
-// }
-
-// function SettingsScreen() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Settings!</Text>
-//     </View>
-//   );
-// }
 
 const Tab = createBottomTabNavigator();
 
