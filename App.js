@@ -1,57 +1,81 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import HomeScreen from './components/HomeScreen';
-import SettingsScreen from './components/SettingsScreen';
-// function homeScreen() {
-//   return (
-//       <HomeScreen />
-// //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-// //       <Text>Home!</Text>
-// //     </View>
-//   );
-// }
+import React from 'react'
+import {View, Text, StyleSheet} from 'react-native'
 
-// function SettingsScreen() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Settings!</Text>
-//     </View>
-//   );
-// }
-
-const Tab = createBottomTabNavigator();
-
-function MyTabs(size, color) {
+const App = ()=>{
   return (
-      <Tab.Navigator
-          screenOptions={{ headerShown: false }}
-      >
-          <Tab.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"home"} color={color} size={size} />)
-              }}
-          />
+    <View style={styles.container}>
+      <View style={styles.header} />
+      <View style={styles.content}>
 
-          <Tab.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{
-                  tabBarIcon: ({ size, color }) => (<Icon name={"user"} color={color} size={size} />)
-              }}
-          />
-      </Tab.Navigator>
-  );
+        <View style={styles.elem}>
+          <View style={styles.userInfo}>
+            <View style={styles.profile} />
+            <Text style={styles.name}>윾또막</Text>
+          </View>
+          <View style={styles.userComment}>
+            <Text>대화명을 입력하세요</Text>
+          </View>
+        </View>
+
+        <View style={styles.elem}>
+          <View style={styles.userInfo}>
+            <View style={styles.profile} />
+            <Text style={styles.name}>저커버그</Text>
+          </View>
+          <View style={styles.userComment}>
+            <Text>정말 맥주라도 한 잔 사는게 어떻겠니?</Text>
+          </View>
+        </View>
+
+      </View>
+      <View style={styles.footer} />
+    </View>
+  )
 }
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <MyTabs/>
-    </NavigationContainer>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    height:60,
+    backgroundColor:'green',
+  },
+  footer: {
+    height:60,
+    backgroundColor:'red',
+  },
+  content: {
+    flex:1,
+  },
+
+  elem: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderColor:'#eee',
+    borderBottomWidth:0.5,
+    padding: 5,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userComment: {
+    padding:8,
+    backgroundColor:'yellow',
+    borderRadius:5,
+  },
+  profile: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'yellow',
+  },
+  name: {
+    paddingLeft: 10,
+  }
+})
+
+export default App;
