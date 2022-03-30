@@ -6,6 +6,7 @@ import MyStack from './MyStack';
 import Home from './src/screens/Home'
 import Login from './src/screens/Login'
 import SignUp from './src/screens/SignUp'
+import MainRouter from './src/components/mainRouter'
 
 
 const Stack = createNativeStackNavigator();
@@ -13,7 +14,12 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen
+          name="Main"
+          component={MainRouter}
+          options={{ title: "Main" }}
+        />
         <Stack.Screen
           name="Home"
           component={Home}
