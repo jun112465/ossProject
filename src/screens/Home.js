@@ -1,6 +1,7 @@
 import React from 'react'
 import {View, Text, StyleSheet, Image} from 'react-native'
 import CustomButton from '../components/CustomButton'
+import MainRouter from '../components/mainRouter'
 
 // https://yuddomack.tistory.com/entry/6React-Native-Navigation-%EA%B8%B0%EC%B4%88-1%EB%B6%80-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0?category=754156
 const Home = ({navigation})=>{
@@ -15,6 +16,12 @@ const Home = ({navigation})=>{
           source={require('ossProject/images/bg.jpeg')} />
       </View>
       <View style={styles.footer}>
+        <CustomButton
+          buttonColor={'#000'}
+          title={'메인화면'}
+          titleColor={'#fff'}
+          onPress={() => navigation.navigate('MainRouter')}
+        />
         <CustomButton 
           buttonColor={'#000'}
           title={'로그인'}

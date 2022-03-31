@@ -7,14 +7,15 @@ const Separator = () => (
 
 const App = () => (
   <SafeAreaView style={styles.container}>
-    <View>
-      <Text style={styles.title}>
-        The title and onPress handler are required. It is recommended to set accessibilityLabel to help make your app usable by everyone.
+    <View style={{margin:20}}>
+      <Text style={styles.title, {margin:10}}>
+        환경설정을 할 수 있는 페이지 {'\n'}
+        1. 로그아웃 {'\n'}
+        2. 닉네임 변경 {'\n'}
+        3. 프로필 사진 변경 {'\n'}
+        4. 등등 {'\n'}
+        
       </Text>
-      <Button
-        title="Press me"
-        onPress={() => Alert.alert('Simple Button pressed')}
-      />
     </View>
     <Separator />
     <View>
