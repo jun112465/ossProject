@@ -1,6 +1,5 @@
-import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity } from 'react-native';
-// import { Button } from 'react-native-paper';
+import React, {useEffect, useState} from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 const DATA = [
     {
@@ -23,17 +22,42 @@ const Item = ({title }) => (
             <Text style={styles.title}>제목</Text>
             <Text style={styles.content}>{title}</Text>
         </TouchableOpacity>
-
     </View>
 );
 
+
 const BoardScreen = () => {
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+    const getString = async ()=>{
+        try{
+            const rs = await fetch('http://localhost:8080/test');
+            const str = await rs.text;
+            console.log("api test : ", str);
+            setData(str)
+        }catch(err){
+            console.log(err);
+        }finally{
+            setLoading(false);
+        }
+    }
+
+    useEffect(()=>{
+        getString();
+    }, []);
+
     const renderItem = ({ item }) => (
         <Item title={item.title} />
     );
 
     return (
         <SafeAreaView style={styles.container}>
+
+            <Text>Hello Axios!!</Text>
+            {/* <Text>{data}</Text>
+            {isLoading ? <Text>Data not loaded</Text> : (
+                <Text style={{fontSize:30}}>{data}</Text>
+            )} */}
             <FlatList
                 data={DATA}
                 renderItem={renderItem}
