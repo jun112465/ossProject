@@ -16,13 +16,13 @@ export default function MainRouter(size, color) {
                 name="Board"
                 component={BoardScreen}
                 options={{
-                    tabBarIcon: ({size,color}) => (<Icon name={"Home"} color={color} size={size}/>)
+                    tabBarIcon: ({size,color}) => (<Icon name={"home"} color={color} size={size}/>)
                 }} />
             <Tab.Screen
                 name="TeamList"
                 component={TeamListScreen}
                 options={{
-                    tabBarIcon: ({ size, color }) => (<Icon name={"home"} color={color} size={size} />)
+                    tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
                 }} />
             <Tab.Screen
                 name="Settings"

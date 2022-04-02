@@ -29,22 +29,24 @@ const Item = ({title }) => (
 const BoardScreen = () => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
-    const getString = async ()=>{
-        try{
-            const rs = await fetch('http://localhost:8080/test');
-            const str = await rs.text;
-            console.log("api test : ", str);
-            setData(str)
-        }catch(err){
-            console.log(err);
-        }finally{
+
+    const getMovies = async () => {
+        try {
+            const response = await fetch('https://reactnative.dev/movies.json');
+            const json = await response.json();
+            setData(json.movies);
+            console.log("getMovies", json.movies)
+        } catch (error) {
+            console.error(error);
+        } finally {
             setLoading(false);
         }
     }
 
-    useEffect(()=>{
-        getString();
+    useEffect(() => {
+        getMovies();
     }, []);
+
 
     const renderItem = ({ item }) => (
         <Item title={item.title} />
@@ -52,17 +54,25 @@ const BoardScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-
-            <Text>Hello Axios!!</Text>
-            {/* <Text>{data}</Text>
-            {isLoading ? <Text>Data not loaded</Text> : (
-                <Text style={{fontSize:30}}>{data}</Text>
-            )} */}
+            <View style={{ flex: 1, padding: 24 }}>
+                {isLoading ? <ActivityIndicator /> : (
+                    <FlatList
+                        data={data}
+                        keyExtractor={({ id }, index) => id}
+                        renderItem={renderItem}
+                        // renderItem={({ item }) => (
+                        //     <Text>{item.title}, {item.releaseYear}</Text>
+                        // )}
+                    />
+                )}
+            </View>
+            {/* <Text>Hello Axios!!</Text>
+            
             <FlatList
                 data={DATA}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
-            />
+            /> */}
         </SafeAreaView>
     );
 }
