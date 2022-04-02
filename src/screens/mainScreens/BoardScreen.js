@@ -32,10 +32,14 @@ const BoardScreen = () => {
 
     const getMovies = async () => {
         try {
-            const response = await fetch('https://reactnative.dev/movies.json');
+            // const response = await fetch('https://reactnative.dev/movies.json');
+            const response = await fetch('http://localhost:8080/test');
             const json = await response.json();
-            setData(json.movies);
-            console.log("getMovies", json.movies)
+            console.log("getJson : ", json)
+            // setData(json.movies);
+            setData([json]); // <- json은 리스트 형식이어야 한다
+            // console.log("getMovies", json.movies)
+            // console.log("data : ", data)
         } catch (error) {
             console.error(error);
         } finally {
