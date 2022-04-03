@@ -8,21 +8,25 @@ import Login from './src/screens/Login'
 import SignUp from './src/screens/SignUp'
 import MainRouter from './src/components/mainRouter'
 
-import AsyncStorageScreen from './src/examples/AsyncStorage';
+import AsyncStorageScreen from './src/examples/AsyncStorageScreen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+
+
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
       {/* <Stack.Navigator screenOptions={{headerShown: false}}> */}
         
-        <Stack.Screen
+        {/* <Stack.Screen
           name="testScreen"
           component={AsyncStorageScreen}
           options={{title:"testScreen"}}
-        />
+        /> */}
         <Stack.Screen
           name="Home"
           component={Home}
@@ -36,7 +40,7 @@ const App = () => {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ title: 'Welcome' }}
+          options={{ title: 'Welcome'}}
         />
         <Stack.Screen
           name="Sign Up"

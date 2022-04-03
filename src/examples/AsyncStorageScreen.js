@@ -22,29 +22,29 @@ AsyncStorageScreen = ()=>{
     }
       
     return (
-        <SafeAreaView style={{flex: 1,}}>
+        <SafeAreaView style={{ flex: 1, }}>
             <View style={styles.container}>
                 <Text style={styles.titleText}>
                     AsyncStorage in React Native
                 </Text>
                 <TextInput
-                placeholder='Enter Some Text Here'
-                value={textInputValue}
-                onChangeText={(data)=>setTextInputValue(data)}
-                underlineColorAndroid='transparent'
-                style={styles.textInputStyle}
+                    placeholder='Enter Some Text Here'
+                    value={textInputValue}
+                    onChangeText={(data) => setTextInputValue(data)}
+                    underlineColorAndroid='transparent'
+                    style={styles.textInputStyle}
                 />
                 <TouchableOpacity
-                onPress={saveValue}
-                style={styles.buttonStyle}>
+                    onPress={saveValue}
+                    style={styles.buttonStyle}>
                     <Text style={styles.buttonTextStyle}>
                         Save Value
                     </Text>
 
                 </TouchableOpacity>
                 <TouchableOpacity
-                onPress={getValue}
-                style={styles.buttonStyle}>
+                    onPress={getValue}
+                    style={styles.buttonStyle}>
                     <Text style={styles.buttonTextStyle}>
                         Get Value
                     </Text>
