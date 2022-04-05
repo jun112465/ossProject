@@ -8,7 +8,7 @@ const Separator = () => (
 const App = () => (
   <SafeAreaView style={styles.container}>
     <View style={{margin:20}}>
-      <Text style={styles.title, {margin:10}}>
+      <Text style={styles.title}>
         환경설정을 할 수 있는 페이지 {'\n'}
         1. 로그아웃 {'\n'}
         2. 닉네임 변경 {'\n'}
