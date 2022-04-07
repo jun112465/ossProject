@@ -1,7 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet, Image} from 'react-native'
 import CustomButton from '../components/CustomButton'
-import MainRouter from '../components/mainRouter'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // https://yuddomack.tistory.com/entry/6React-Native-Navigation-%EA%B8%B0%EC%B4%88-1%EB%B6%80-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0?category=754156

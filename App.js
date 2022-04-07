@@ -2,31 +2,20 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MyStack from './MyStack';
+import AsyncStorageScreen from './src/examples/AsyncStorageScreen';
+//화면목록
 import Home from './src/screens/Home'
 import Login from './src/screens/Login'
 import SignUp from './src/screens/SignUp'
-import MainRouter from './src/components/mainRouter'
+import MainRouter from './src/screens/mainScreens/mainRouter';
 
-import AsyncStorageScreen from './src/examples/AsyncStorageScreen';
-
+//이동할 수 있는 화면들의 스택
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-
-
-
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      {/* <Stack.Navigator screenOptions={{headerShown: false}}> */}
-        
-        {/* <Stack.Screen
-          name="testScreen"
-          component={AsyncStorageScreen}
-          options={{title:"testScreen"}}
-        /> */}
         <Stack.Screen
           name="Home"
           component={Home}
