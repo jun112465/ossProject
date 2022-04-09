@@ -26,7 +26,7 @@ const Item = ({title }) => (
 );
 
 
-const BoardScreen = () => {
+const BoardScreen = ({route,navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
@@ -58,6 +58,9 @@ const BoardScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View>
+                <Text style={styles.title}>{route.params.schoolName} 게시판</Text>
+            </View>
             <View style={{ flex: 1, padding: 24 }}>
                 {isLoading ? <ActivityIndicator /> : (
                     <FlatList

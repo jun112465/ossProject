@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity } from 'react-native';
+import TeamRoom from './TeamRoomScreen';
 // import { Button } from 'react-native-paper';
 
 const DATA = [
@@ -17,17 +18,21 @@ const DATA = [
     },
 ];
 
-const Item = ({title }) => (
-    <View style={styles.item}>
-        <TouchableOpacity onPress={() => { alert('Hi') }}>
-            <Text style={styles.title}>단톡방 입장</Text>
-            <Text style={styles.content}>{title}</Text>
-        </TouchableOpacity>
 
-    </View>
-);
 
-const TeamListScreen = () => {
+const TeamListScreen = ({navigation}) => {
+
+    const Item = ({title}) => (
+        <View style={styles.item}>
+            <TouchableOpacity onPress={() => { navigation.navigate("TeamRoom", {
+                teamName : title,
+            })}}>
+                <Text style={styles.title}>단톡방 입장</Text>
+                <Text style={styles.content}>{title}</Text>
+            </TouchableOpacity>
+
+        </View>
+    );
     const renderItem = ({ item }) => (
         <Item title={item.title} />
     );
@@ -74,3 +79,7 @@ const styles = StyleSheet.create({
 });
 
 export default TeamListScreen;
+
+
+
+

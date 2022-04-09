@@ -22,7 +22,9 @@ const DATA = [
 const Screen = ({navigation}) => {
     const Item = ({ schoolName }) => (
         <View style={styles.item}>
-            <TouchableOpacity onPress={() => { navigation.navigate('Board')}}>
+            <TouchableOpacity onPress={() => { navigation.navigate('Board', {
+                schoolName: schoolName,
+            })}}>
                 <Text style={styles.title}>{schoolName}</Text>
             </TouchableOpacity>
         </View>
