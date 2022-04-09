@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './SettingsScreen'
-import TeamListScreen from './TeamListScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import BoardStackScreen from './board/BoardStackScreen';
+import BoardStack from './board/BoardStack';
+import TeamStack from './teams/TeamStack'
 
 const Tab = createBottomTabNavigator();
 
@@ -15,13 +15,13 @@ export default function MainRouter(size, color) {
             <Tab.Screen
                 name="BoardStack"
                 // component={BoardScreen}
-                component={BoardStackScreen}
+                component={BoardStack}
                 options={{
                     tabBarIcon: ({size,color}) => (<Icon name={"home"} color={color} size={size}/>)
                 }} />
             <Tab.Screen
-                name="TeamList"
-                component={TeamListScreen}
+                name="TeamStack"
+                component={TeamStack}
                 options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
                 }} />
