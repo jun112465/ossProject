@@ -9,6 +9,8 @@ import Login from './src/screens/Login'
 import SignUp from './src/screens/SignUp'
 import MainRouter from './src/screens/mainScreens/mainRouter';
 
+import kakaoLogin from './src/examples/kakaoLogin';
+
 //이동할 수 있는 화면들의 스택
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +30,8 @@ const App = () => {
         />
         <Stack.Screen
           name="Login"
-          component={Login}
+          // component={Login}
+          component={kakaoLogin}
           options={{ title: 'Welcome'}}
         />
         <Stack.Screen
