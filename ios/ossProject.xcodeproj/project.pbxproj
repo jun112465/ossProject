@@ -10,6 +10,7 @@
 		00E356F31AD99517003FC87E /* ossProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ossProjectTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		607C196028058F9D001C2AC0 /* bh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607C195F28058F9D001C2AC0 /* bh.swift */; };
 		7F03C1898C3AC342DADB5516 /* libPods-ossProject-ossProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5841A756F817CEDE468DAF78 /* libPods-ossProject-ossProjectTests.a */; };
 		88EEDDBD01EA8884C2A09DBF /* libPods-ossProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 961DC841D949E55E5678CBAC /* libPods-ossProject.a */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,8 @@
 		54A8562828E1437C877FD36B /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = ../fonts/Fontisto.ttf; sourceTree = "<group>"; };
 		57CC423E84C44EA5B40578AC /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = ../fonts/MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
 		5841A756F817CEDE468DAF78 /* libPods-ossProject-ossProjectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ossProject-ossProjectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		607C195E28058F9C001C2AC0 /* ossProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ossProject-Bridging-Header.h"; sourceTree = "<group>"; };
+		607C195F28058F9D001C2AC0 /* bh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bh.swift; sourceTree = "<group>"; };
 		609C7FAB27E8E9FC00D88683 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ossProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		833F0636E0E84F5A81A50251 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = ../fonts/Feather.ttf; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				607C195F28058F9D001C2AC0 /* bh.swift */,
+				607C195E28058F9C001C2AC0 /* ossProject-Bridging-Header.h */,
 			);
 			name = ossProject;
 			sourceTree = "<group>";
@@ -244,7 +249,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1330;
 					};
 				};
 			};
@@ -405,6 +410,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				607C196028058F9D001C2AC0 /* bh.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,6 +430,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4E24CA9E6CB160CE8A7CB0DA /* Pods-ossProject-ossProjectTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = BK5R7D2WLW;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -452,6 +459,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 53291A1B8C52F9C866E5B7B5 /* Pods-ossProject-ossProjectTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = BK5R7D2WLW;
@@ -494,6 +502,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ossProject;
+				SWIFT_OBJC_BRIDGING_HEADER = "ossProject-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -520,6 +529,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ossProject;
+				SWIFT_OBJC_BRIDGING_HEADER = "ossProject-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
