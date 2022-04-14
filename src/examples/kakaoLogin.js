@@ -6,6 +6,7 @@ export default ()=>{
 
   const [result, setResult] = useState("nothing")
   const [name, setName] = useState("name")
+  const [id, setId] = useState("")
 
   const signInWithKakao = async ()=> {
     const token = await login();
@@ -15,6 +16,7 @@ export default ()=>{
   const getProfile = async ()=>{
     const profile = await getKakaoProfile();
     setName(profile.nickname)
+    setId(profile.id);
     setResult(JSON.stringify(profile));
     console.log(result)
     console.log((await getAccessToken()).accessToken)
@@ -46,16 +48,28 @@ export default ()=>{
   };
 
   const sendData = ()=>{
-    return fetch('http://localhost:8080/kakao', {
+    const requestOptions = {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name
-      })
-    }).then((response)=>console.log(response));
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({'id':id, 'name': name})
+    };
+    console.log(requestOptions.body);
+    fetch('http://localhost:8080/kakao', requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
+    // testData = JSON.stringify({ name: "jun" });
+    // console.log(testData);
+    // return fetch('http://localhost:8080/kakao', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     name: name
+    //   })
+    // }).then();
   }
 
   useEffect(()=>{
@@ -66,6 +80,7 @@ export default ()=>{
     <View style={{padding:40, justifyContent: "center", alignItems: "center"}}>
       <Text>TESTING</Text>
       <Text style={{fontSize:30}}>{name}</Text>
+      <Text style={{fontSize:30}}>{id}</Text>
       <Text style={{fontSize:30, padding: 20}}>정보 출력</Text>
       <Text style={{fontSize:15}}>{result}</Text>
       <Button
