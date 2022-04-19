@@ -30,16 +30,12 @@ const BoardScreen = ({route,navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
+    //영화 5개 불러오는 예제 데이터
     const getMovies = async () => {
         try {
             const response = await fetch('https://reactnative.dev/movies.json');
-            // const response = await fetch('http://localhost:8080/test');
             const json = await response.json();
-            console.log("getJson : ", json)
             setData(json.movies);
-            // setData([json]); // <- json은 리스트 형식이어야 한다
-            // console.log("getMovies", json.movies)
-            // console.log("data : ", data)
         } catch (error) {
             console.error(error);
         } finally {
@@ -47,8 +43,27 @@ const BoardScreen = ({route,navigation}) => {
         }
     }
 
+    // 게시글 100개 불러오는 예제 데이터
+    // 무한 스크롤 적용 예정
+    const getPosts = async()=>{
+        try{
+            const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+            const json = await response.json();
+            // 데이터 20개만 일단 설정해주기
+            setData(json.slice(0,20)); 
+            console.log(json[0]);
+        }catch(error){
+            console.error(error)
+        }finally{
+            setLoading(false);
+            console.log("data fetched");
+        }
+
+    }
+
     useEffect(() => {
-        getMovies();
+        // getMovies();
+        getPosts();
     }, []);
 
 
@@ -65,21 +80,12 @@ const BoardScreen = ({route,navigation}) => {
                 {isLoading ? <ActivityIndicator /> : (
                     <FlatList
                         data={data}
-                        keyExtractor={({ id }, index) => id}
+                        // keyExtractor가 뭔지 알아보기
+                        // keyExtractor={({ id }, index) => id}
                         renderItem={renderItem}
-                        // renderItem={({ item }) => (
-                        //     <Text>{item.title}, {item.releaseYear}</Text>
-                        // )}
                     />
                 )}
             </View>
-            {/* <Text>Hello Axios!!</Text>
-            
-            <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-            /> */}
         </SafeAreaView>
     );
 }
