@@ -61,6 +61,3 @@ buck-out/
 
 #backendServer
 /backend
-
-#myfiles
-README.MD
