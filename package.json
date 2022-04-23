@@ -19,6 +19,7 @@
     "axios": "^0.26.1",
     "react": "17.0.2",
     "react-native": "0.67.4",
+    "react-native-calendars": "^1.1282.0",
     "react-native-gesture-handler": "^2.3.2",
     "react-native-paper": "^3.12.0",
     "react-native-reanimated": "^2.5.0",

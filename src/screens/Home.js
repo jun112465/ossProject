@@ -25,17 +25,11 @@ const Home = ({navigation})=>{
         />
         <CustomButton 
           buttonColor={'#000'}
-          title={'로그인'}
+          title={'KAKAO로 로그인'}
           titleColor={'#fff'}
           onPress={() => navigation.navigate('Login', {
             color: "red"
           })}
-        />
-        <CustomButton
-          buttonColor={'#444'}
-          title={'회원가입'}
-          titleColor={'#fff'}
-          onPress={() => navigation.navigate('Sign Up')}
         />
       </View>
     </View> 

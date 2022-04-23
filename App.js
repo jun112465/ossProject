@@ -34,12 +34,6 @@ const App = () => {
           component={kakaoLogin}
           options={{ title: 'Welcome'}}
         />
-        <Stack.Screen
-          name="Sign Up"
-          component={SignUp}
-          options={{ title: 'Welcome' }}
-        />
-        {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

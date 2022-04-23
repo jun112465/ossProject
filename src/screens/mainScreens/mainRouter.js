@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import BoardStack from './board/BoardStack';
 import TeamStack from './teams/TeamStack'
+import MessageStack from './message/MessageStack'
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,12 @@ export default function MainRouter(size, color) {
                 component={TeamStack}
                 options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
+                }} />
+            <Tab.Screen
+                name="MessageStack"
+                component={MessageStack}
+                options={{
+                    tabBarIcon: ({ size, color }) => (<Icon name={"envelope"} color={color} size={size} />)
                 }} />
             <Tab.Screen
                 name="Settings"
