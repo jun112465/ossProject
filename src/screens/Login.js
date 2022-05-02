@@ -4,12 +4,24 @@ import CustomButton from "../components/CustomButton"
 
 export default ({route,navigation})=> {
 
-  useEffect(()=>{
+  let kakaologinHandler = ()=>{
+    
+  }
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: 'React POST Request Example' })
+  };
+  fetch('http://localhost:8080/login', requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data));
+
+  useEffect(() => {
     console.log("Login Screen 컴포넌트 mounted")
     console.log(route)
     console.log(route.params) // Props
 
-    return ()=>{
+    return () => {
       console.log("Login Screen 컴포넌트 unmounted")
     }
   })

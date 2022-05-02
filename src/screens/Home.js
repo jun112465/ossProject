@@ -1,10 +1,26 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, Image} from 'react-native'
 import CustomButton from '../components/CustomButton'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+
 // https://yuddomack.tistory.com/entry/6React-Native-Navigation-%EA%B8%B0%EC%B4%88-1%EB%B6%80-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0?category=754156
 const Home = ({navigation})=>{
+
+  const getValue = ()=>{
+    AsyncStorage.getItem("accessToken").then(value=>{
+      console.log(value)
+      return value
+    })
+  }
+
+  //로그인 상태면 바로 메인 라우터로 넘어가기
+  if(getValue){
+    console.log("AccessToken detected")
+    navigation.navigate("MainRouter")
+  }else{
+    console.log("No AccessToken")
+  }
 
   return (
     <View style={styles.container}>
@@ -30,6 +46,10 @@ const Home = ({navigation})=>{
           onPress={() => navigation.navigate('Login', {
             color: "red"
           })}
+        />
+        <CustomButton
+        title={"get Value"}
+        onPress={()=>getValue()}
         />
       </View>
     </View> 
