@@ -6,8 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default ({navigation})=>{
   const [result, setResult] = useState("")
 
+  // user의 프로필 정보 
   let profile = null
 
+  // asyncStorage에 저장
   const saveValue = (access, refresh)=>{
     console.log(access)
     console.log(refresh)
@@ -15,6 +17,7 @@ export default ({navigation})=>{
     AsyncStorage.setItem("refreshToken", refresh)
   }
 
+  // 카카오에 로그인 후 토큰 요청
   const signInWithKakao = async ()=> {
     let token = await login();
     accessToken = token.accessToken
@@ -22,6 +25,7 @@ export default ({navigation})=>{
     saveValue(accessToken, refreshToken);
   };
 
+  // 토큰을 기반으로 프로필 정보 불러오기
   const getProfile = async ()=>{
     profile = await getKakaoProfile();
     // setResult(JSON.stringify(profile))
@@ -30,6 +34,7 @@ export default ({navigation})=>{
     // await setResult(JSON.stringify(profile))
   };
 
+  //서버에 회원 정보 전송
   const sendData = async ()=>{
     // console.log("sendData : 3")
     id = profile.id
@@ -44,22 +49,11 @@ export default ({navigation})=>{
     fetch('http:/localhost:8080/kakao', requestOptions)
       .then(response => response.json())
       .then(data => console.log(data));
-    // try {
-    //   const response = await fetch(
-    //     'http://localhost:8080/kakao', {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({ 'id': id, 'nickname': nickname })
-    //     }
-    //   );
-    //   const json = response.json();
-    //   console.log(json)
-    // } catch (error) {
-    //   throw error
-    // }
   };
 
+  // 렌더링 후 실행
   useEffect(()=>{
+    // 비동기 실행을 위해 함수를 따로 만들었음
     async function loginFunc(){
       await signInWithKakao();
       await getProfile();

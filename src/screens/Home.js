@@ -47,10 +47,6 @@ const Home = ({navigation})=>{
             color: "red"
           })}
         />
-        <CustomButton
-        title={"get Value"}
-        onPress={()=>getValue()}
-        />
       </View>
     </View> 
   )
