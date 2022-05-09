@@ -225,7 +225,7 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				BCE2A73C5B0B1703BCD486CD /* [CP] Copy Pods Resources */,
+				C273D68D5E5F04A602E90E7D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,7 +358,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ossProject-ossProjectTests/Pods-ossProject-ossProjectTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BCE2A73C5B0B1703BCD486CD /* [CP] Copy Pods Resources */ = {
+		C273D68D5E5F04A602E90E7D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
