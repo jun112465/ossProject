@@ -13,6 +13,9 @@ const TeamRoom = ({route, navigation})=>{
     })
     const [month,setMonth] = useState(0)
 
+    useEffect(()=>{
+
+    }, [items])
 
 
     const setEmptyMonth = (m)=>{
@@ -23,6 +26,7 @@ const TeamRoom = ({route, navigation})=>{
             if(key in items) continue
             items[key] = []
         }
+        console.log(items)
     }
 
     const renderItem = (item) => {
@@ -39,8 +43,13 @@ const TeamRoom = ({route, navigation})=>{
             <Agenda
                 items={items}
                 renderItem={renderItem}
-                loadItemsForMonth={m => {
-                    setEmptyMonth(m)
+                loadItemsForMonth={async m => {
+                    console.log("item loading")
+                    await setEmptyMonth(m)
+                    console.log("item loaded")
+                }}
+                onDayLongPress={(day)=>{
+                    console.log(day)
                 }}
             />
         </SafeAreaView>
