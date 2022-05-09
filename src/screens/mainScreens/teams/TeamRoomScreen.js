@@ -1,60 +1,64 @@
-import React from "react";
-import { Text, SafeAreaView, View } from "react-native";
+import React, {useState, useEffect} from "react";
+import { Text, SafeAreaView, View, StyleSheet} from "react-native";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const TeamRoom = ({route, navigation})=>{
 
-    console.log(route)
+    const [items, setItems] = useState({
+        '2022-05-22': [{ name: 'item 1 - any js object' }],
+        '2022-05-23': [{ name: 'item 2 - any js object', height: 80 }],
+        '2022-05-24': [],
+        '2022-05-25': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
+    })
+    const [month,setMonth] = useState(0)
+
+
+
+    const setEmptyMonth = (m)=>{
+        let daysOfMonth = new Date(m.year, m.month, 0).getDate()
+        tmpItems = {}
+        for (let i = 1; i <= daysOfMonth; i++) {
+            key = m.year + "-" + m.month.toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0')
+            if(key in items) continue
+            items[key] = []
+        }
+    }
+
+    const renderItem = (item) => {
+        return (
+          <View style={styles.itemContainer}>
+            <Text>{item.name}</Text>
+            <Text>{`🍪`}</Text>
+          </View>
+        );
+      };
+
     return (
-        <SafeAreaView style={{justifyContent: 'center',
-        alignItems: 'center'}}>
-            <Text style={{padding: 32, alignContent:"center", fontSize:24}}>{route.params.teamName}</Text>
-            <Calendar
-            markingType={'period'}
-            markedDates={{
-                // '2022-05-16': {selected: true, marked: true, selectedColor: 'blue'},
-                // '2022-05-17': {marked: true},
-                // '2022-05-18': {marked: true, dotColor: 'red', activeOpacity: 0},
-                // '2022-05-19': {disabled: true, disableTouchEvent: true}
-
-                '2022-05-20': {textColor: 'green'},
-                '2022-05-22': {startingDay: true, color: 'green'},
-                '2022-05-23': {selected: true, endingDay: true, color: 'green', textColor: 'gray'},
-                '2022-05-04': {startingDay: true, color: 'green', endingDay: true},
-
-                '2022-05-15': {marked: true, dotColor: '#50cebb'},
-                '2022-05-16': {marked: true, dotColor: '#50cebb'},
-                '2022-05-21': {startingDay: true, color: '#50cebb', textColor: 'white'},
-                '2022-05-22': {color: '#70d7c7', textColor: 'white'},
-                '2022-05-23': {color: '#70d7c7', textColor: 'white', marked: true, dotColor: 'white'},
-                '2022-05-24': {color: '#70d7c7', textColor: 'white'},
-                '2022-05-25': {endingDay: true, color: '#50cebb', textColor: 'white'}
-              }}
-            style={{
-                borderWidth: 1,
-                borderColor: 'gray',
-                height: 350,
-                width: 400,
-              }}
+        <SafeAreaView style={styles.safe}>
+            <Agenda
+                items={items}
+                renderItem={renderItem}
+                loadItemsForMonth={m => {
+                    setEmptyMonth(m)
+                }}
             />
-
-            <View style={{
-                backgroundColor: 'skyblue',
-                padding: 20,
-                marginVertical: 8,
-                marginHorizontal: 16,
-            }}>
-                <TouchableOpacity>
-                    <Text style={{
-                        fontSize: 20
-                    }}>일정 등록</Text>
-                </TouchableOpacity>
-            </View>
-            
-
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    safe: {
+      flex: 1,
+    },
+    itemContainer: {
+      backgroundColor: 'white',
+      margin: 5,
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+    },
+  });
 
 export default TeamRoom;
