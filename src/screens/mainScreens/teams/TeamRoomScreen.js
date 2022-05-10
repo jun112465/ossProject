@@ -11,23 +11,27 @@ const TeamRoom = ({route, navigation})=>{
         '2022-05-24': [],
         '2022-05-25': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
     })
-    const [month,setMonth] = useState(0)
+    const [month, setMonth] = useState(0)
+    const [first, setFirst] = useState(true)
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-    }, [items])
+    // }, [items])
 
 
-    const setEmptyMonth = (m)=>{
-        let daysOfMonth = new Date(m.year, m.month, 0).getDate()
-        tmpItems = {}
+    const setEmptyMonth = (year,month)=>{
+        let daysOfMonth = new Date(year, month, 0).getDate()
+        let tmp = {}
         for (let i = 1; i <= daysOfMonth; i++) {
-            key = m.year + "-" + m.month.toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0')
-            if(key in items) continue
-            items[key] = []
+            key = year + "-" + (month).toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0')
+            tmp[key] = []
         }
-        console.log(items)
+        for(let key in items){
+            tmp[key] = items[key]
+        }
+        setItems(tmp)
     }
+
 
     const renderItem = (item) => {
         return (
@@ -43,10 +47,19 @@ const TeamRoom = ({route, navigation})=>{
             <Agenda
                 items={items}
                 renderItem={renderItem}
-                loadItemsForMonth={async m => {
-                    console.log("item loading")
-                    await setEmptyMonth(m)
-                    console.log("item loaded")
+                loadItemsForMonth={async date=>{
+                    // 처음에 1회만 실행
+                    if(first){
+                        setMonth(date.month+1)
+                        setEmptyMonth(date.year, date.month+1)
+                        setFirst(!first)
+                    }
+                }}
+                onDayPress={(date)=>{
+                    if(month != date.month){
+                        setMonth(date.month)
+                        setEmptyMonth(date.year, date.month)
+                    }
                 }}
                 onDayLongPress={(day)=>{
                     console.log(day)
