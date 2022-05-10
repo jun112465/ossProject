@@ -9,7 +9,7 @@ import Login from './src/screens/Login'
 import SignUp from './src/screens/SignUp'
 import MainRouter from './src/screens/mainScreens/mainRouter';
 
-import kakaoLogin from './src/examples/kakaoLogin';
+import kakaoLogin from './src/screens/kakaoLogin';
 
 //이동할 수 있는 화면들의 스택
 const Stack = createNativeStackNavigator();
