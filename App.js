@@ -17,11 +17,12 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+      screenOptions={{headerShown: false}}>
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: 'Home' }}
+          // options={{ title: 'Home',}}
         />
         <Stack.Screen
           name="MainRouter"

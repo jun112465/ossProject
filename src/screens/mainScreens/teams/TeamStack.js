@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {Button} from 'react-native'
 
 import TeamList from './TeamListScreen';
 import TeamRoom from './TeamRoomScreen'
@@ -9,7 +10,15 @@ const App = ()=>{
     return (
         <TeamStack.Navigator>
             <TeamStack.Screen name="TeamList" component={TeamList} />
-            <TeamStack.Screen name="TeamRoom" component={TeamRoom} />
+            <TeamStack.Screen name="TeamRoom" component={TeamRoom} options={{
+                headerRight: (route) => (
+                    <Button
+                      onPress={() => alert('This is a button!')}
+                      title="Info"
+                      color="blue"
+                    />
+                )}
+            }/>
         </TeamStack.Navigator>
     )
 }

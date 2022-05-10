@@ -62,6 +62,7 @@ const TeamRoom = ({route, navigation})=>{
         setItems(tmp)
     }
 
+    console.log(route)
     return (
         <SafeAreaView style={styles.safe}>
             <Agenda
@@ -156,6 +157,7 @@ const TeamRoom = ({route, navigation})=>{
                     </View>
                 </View>
             </Modal>
+            <Text>wefwfe</Text>
         </SafeAreaView>
     )
 }
