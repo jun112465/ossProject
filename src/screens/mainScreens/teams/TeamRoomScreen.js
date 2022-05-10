@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
-import { Text, SafeAreaView, View, StyleSheet, Modal, Pressable, TextInput, TouchableOpacity} from "react-native";
+import { Text, SafeAreaView, View, StyleSheet, Modal, Pressable, TextInput, TouchableOpacity, FlatList} from "react-native";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
 
 const TeamRoom = ({route, navigation})=>{
 
@@ -17,9 +19,14 @@ const TeamRoom = ({route, navigation})=>{
     const [selectedDate, setSelectedDate] = useState();
     const [input, setInput] = useState("")
 
-    useEffect(()=>{
+    const [showMenu, setShowMenu] = useState(false)
+    const [left,setLeft] = useState(0)
 
-    }, [input])
+    useEffect(()=>{
+        if(showMenu) setLeft(170)
+        else setLeft(0)
+
+    }, [input, showMenu])
 
     const setEmptyMonth = (year,month)=>{
         let daysOfMonth = new Date(year, month, 0).getDate()
@@ -62,10 +69,32 @@ const TeamRoom = ({route, navigation})=>{
         setItems(tmp)
     }
 
-    console.log(route)
+    const getProfileImage = ()=>{
+
+    }
+
     return (
         <SafeAreaView style={styles.safe}>
+            <View style={{marginTop:50, justifyContent:"flex-start"}}>
+                <Text>weoijfwefoij</Text>
+                
+            </View>
+            <View style={{flexGrow:1, position:"absolute", top:50, bottom:0, left:left, right:0}}>
+            <TouchableOpacity
+                style={{width:50, alignItems:"flex-end"}}
+                onPress={async ()=>{
+                    console.log("pressed")
+                    setShowMenu(!showMenu)
+                }}
+            >
+                <Icon 
+                size={25}
+                style={{marginLeft:10, marginBottom:10}}
+                name={'navicon'} 
+                color={"black"}/>
+            </TouchableOpacity>
             <Agenda
+                styles={{flex:4}}
                 items={items}
                 renderItem={renderItem}
                 loadItemsForMonth={async date=>{
@@ -157,7 +186,7 @@ const TeamRoom = ({route, navigation})=>{
                     </View>
                 </View>
             </Modal>
-            <Text>wefwfe</Text>
+            </View>
         </SafeAreaView>
     )
 }
@@ -165,6 +194,7 @@ const TeamRoom = ({route, navigation})=>{
 const styles = StyleSheet.create({
     safe: {
         flex: 1,
+        backgroundColor: "skyblue"
     },
     itemContainer: {
         backgroundColor: 'white',

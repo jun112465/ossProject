@@ -10,15 +10,11 @@ const App = ()=>{
     return (
         <TeamStack.Navigator>
             <TeamStack.Screen name="TeamList" component={TeamList} />
-            <TeamStack.Screen name="TeamRoom" component={TeamRoom} options={{
-                headerRight: (route) => (
-                    <Button
-                      onPress={() => alert('This is a button!')}
-                      title="Info"
-                      color="blue"
-                    />
-                )}
-            }/>
+            <TeamStack.Screen 
+            name="TeamRoom" 
+            component={TeamRoom} 
+            options={{headerShown:false}}
+            />
         </TeamStack.Navigator>
     )
 }
