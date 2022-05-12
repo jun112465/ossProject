@@ -17,7 +17,7 @@ const Home = ({navigation})=>{
   //로그인 상태면 바로 메인 라우터로 넘어가기
   if(getValue){
     console.log("AccessToken detected")
-    // navigation.navigate("MainRouter")
+    navigation.navigate("MainRouter")
   }else{
     console.log("No AccessToken")
   }

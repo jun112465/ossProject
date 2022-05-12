@@ -48,7 +48,10 @@ export default ({navigation})=>{
     };
     fetch('http:/localhost:8080/kakao', requestOptions)
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => console.log(data))
+      .then(d=>{
+        navigation.navigate("MainRouter")
+      })
   };
 
   // 렌더링 후 실행
