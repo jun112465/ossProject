@@ -3,6 +3,7 @@ import { Text, SafeAreaView, View, StyleSheet, Modal, Pressable, TextInput, Touc
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TeamRoom = ({route, navigation})=>{
 
@@ -70,6 +71,10 @@ const TeamRoom = ({route, navigation})=>{
     }
 
     const getProfileImage = ()=>{
+
+    }
+
+    const getSchedules = async (id)=>{
 
     }
 
