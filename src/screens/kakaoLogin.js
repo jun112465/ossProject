@@ -10,11 +10,13 @@ export default ({navigation})=>{
   let profile = null
 
   // asyncStorage에 저장
-  const saveValue = (access, refresh)=>{
-    console.log(access)
-    console.log(refresh)
+  const saveTokenValue = (access, refresh, id)=>{
     AsyncStorage.setItem("accessToken", access)
     AsyncStorage.setItem("refreshToken", refresh)
+  }
+  const saveUserInfo = (id, nickname)=>{
+    AsyncStorage.setItem("userId", id)
+    AsyncStorage.setItem("userNickname", nickname)
   }
 
   // 카카오에 로그인 후 토큰 요청
@@ -22,24 +24,29 @@ export default ({navigation})=>{
     let token = await login();
     accessToken = token.accessToken
     refreshToken = token.refreshToken
-    saveValue(accessToken, refreshToken);
+    saveTokenValue(accessToken, refreshToken);
   };
 
   // 토큰을 기반으로 프로필 정보 불러오기
   const getProfile = async ()=>{
     profile = await getKakaoProfile();
+    userId = profile.id
+    userNickname = profile.nickname
+    saveUserInfo(userId, userNickname)
+    console.log("getProfile : " + userId, userNickname)
+    // AsyncStorage.setItem("userId", profile.id)
+    // AsyncStorage.setItem("userNickName", profile.nickname)
     // setResult(JSON.stringify(profile))
     // 1. setState함수는 비동기 함수다
     // 2. 호출후에 useEffect가 실행된다
     // await setResult(JSON.stringify(profile))
+
   };
 
   //서버에 회원 정보 전송
   const sendData = async ()=>{
-    // console.log("sendData : 3")
     id = profile.id
     nickname = profile.nickname
-    console.log(id, nickname)
 
     const requestOptions = {
       method: 'POST',
@@ -48,10 +55,6 @@ export default ({navigation})=>{
     };
     fetch('http:/localhost:8080/kakao', requestOptions)
       .then(response => response.json())
-      .then(data => console.log(data))
-      .then(d=>{
-        navigation.navigate("MainRouter")
-      })
   };
 
   // 렌더링 후 실행
@@ -61,7 +64,7 @@ export default ({navigation})=>{
       await signInWithKakao();
       await getProfile();
       await sendData()
-      navigation.navigate("Home")
+      navigation.navigate("MainRouter")
     }
     loginFunc()
   })

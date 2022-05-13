@@ -1,16 +1,27 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './SettingsScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BoardStack from './board/BoardStack';
 import TeamStack from './teams/TeamStack'
 import MessageStack from './message/MessageStack'
 
 const Tab = createBottomTabNavigator();
-
 export default function MainRouter(size, color) {
+    useEffect(()=>{
+        console.log("mainRouter Screen")
+
+        let a = async ()=>{
+            let item = await AsyncStorage.getItem("accessToken")
+            let id = await AsyncStorage.getItem("userId")
+            console.log(item)
+            console.log(id)
+        }
+        a()
+    })
     return (
         <Tab.Navigator screenOptions={{ headerShown: false}}>
             <Tab.Screen

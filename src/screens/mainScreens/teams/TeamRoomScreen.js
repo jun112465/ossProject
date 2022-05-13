@@ -74,7 +74,7 @@ const TeamRoom = ({route, navigation})=>{
 
     }
 
-    const getSchedules = async (id)=>{
+    const getSchedules = async ()=>{
 
     }
 
