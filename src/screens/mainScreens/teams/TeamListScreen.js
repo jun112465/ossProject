@@ -1,26 +1,52 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useState, useEffect} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity } from 'react-native';
 import TeamRoom from './TeamRoomScreen';
 // import { Button } from 'react-native-paper';
 
 const DATA = [
     {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: "세계사" 
+        teamId: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        teamName: "세계사" 
     },
     {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: "캡스톤",
+        teamId: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        teamName: "캡스톤",
     },
     {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: "문쓰발",
+        teamId: '58694a0f-3da1-471f-bd96-145571e29d72',
+        teamName: "문쓰발",
     },
 ];
 
 
 
+
+
 const TeamListScreen = ({navigation}) => {
+    const [teamList, setTeamList] = useState([])
+    useEffect(()=>{
+        getTeamList()
+    })
+
+    const getTeamList = async () => {
+        id = await AsyncStorage.getItem("userId")
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'id': id })
+        };
+        await fetch('http:/localhost:8080/team/teamlist', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                tmp = []
+                for(let d in data){
+                    console.log(d)
+                }
+            })
+    }
+    
+
 
     const Item = ({title}) => (
         <View style={styles.item}>

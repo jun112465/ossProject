@@ -32,7 +32,7 @@ export default ({navigation})=>{
     profile = await getKakaoProfile();
     userId = profile.id
     userNickname = profile.nickname
-    saveUserInfo(userId, userNickname)
+    // saveUserInfo(userId, userNickname)
     console.log("getProfile : " + userId, userNickname)
     // AsyncStorage.setItem("userId", profile.id)
     // AsyncStorage.setItem("userNickName", profile.nickname)
@@ -64,6 +64,8 @@ export default ({navigation})=>{
       await signInWithKakao();
       await getProfile();
       await sendData()
+      await saveUserInfo(profile.id.toString(), profile.nickname)
+      
       navigation.navigate("MainRouter")
     }
     loginFunc()

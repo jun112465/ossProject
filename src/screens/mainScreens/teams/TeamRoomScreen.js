@@ -13,6 +13,7 @@ const TeamRoom = ({route, navigation})=>{
         '2022-05-24': [],
         '2022-05-25': [{ name: 'item 3 - any js object', id:123 }, { name: 'any js object', id:124 }]
     })
+
     const [month, setMonth] = useState(0)
     const [first, setFirst] = useState(true)
     const [modalVisible, setModalVisible] = useState(false);
@@ -75,7 +76,29 @@ const TeamRoom = ({route, navigation})=>{
     }
 
     const getSchedules = async ()=>{
-
+        let userId = await AsyncStorage.getItem("userId")
+        console.log(userId)
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'teamId' : teamId })
+        };
+        fetch('http:/localhost:8080/team/schedules', requestOptions)
+            .then(response => response.json())
+    }
+    const addSchedule2 = async ()=>{
+        let userId = await AsyncStorage.getItem("userId")
+        console.log(userId)
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ 
+        //         'teamId' : teamId, 
+        //         'userId' : userId, 
+        //         ''})
+        // };
+        // fetch('http:/localhost:8080/team/schedules', requestOptions)
+        //     .then(response => response.json())
     }
 
     return (
