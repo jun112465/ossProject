@@ -19,23 +19,25 @@ const TeamRoom = ({route, navigation})=>{
     const [teamMembers, setTeamMembers] = useState([
         {
             id : '18011646',
-            nickname : 'test1'
+            nickname : 'nickname1'
         },
         {
             id : '12345678',
-            nickname : 'test2'
+            nickname : 'nickname2'
         },
         {
             id : '56781234',
-            nickname : 'test3'
+            nickname : 'nickname3'
         }
     ])
     
 
     const [month, setMonth] = useState(0)
     const [first, setFirst] = useState(true)
+
     const [modalVisible, setModalVisible] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
+
     const [selectedDate, setSelectedDate] = useState();
     const [input, setInput] = useState("")
 
@@ -46,6 +48,7 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
         console.log(teamMembers)
+        console.log({route})
     }, [input, showMenu])
 
     const setEmptyMonth = (year,month)=>{
@@ -105,6 +108,7 @@ const TeamRoom = ({route, navigation})=>{
         fetch('http:/localhost:8080/team/schedules', requestOptions)
             .then(response => response.json())
     }
+
     const addSchedule2 = async ()=>{
         let userId = await AsyncStorage.getItem("userId")
         console.log(userId)
@@ -146,30 +150,46 @@ const TeamRoom = ({route, navigation})=>{
 
 
     const renderTeamMemberItem = ({item})=>{
-        <View>
-            <Text>{item.id}</Text>
-            <Text>{item.nickname}</Text>
-        </View>
+        return (
+            <TouchableOpacity
+            style={{
+                backgroundColor: 'coral',
+                padding: 20,
+                marginVertical: 15,
+                marginHorizontal: 10,
+                borderRadius: 20,
+                top: 20,
+            }}>
+                <Text>{item.id}</Text>
+                <Text>{item.nickname}</Text>
+            </TouchableOpacity>
+        )
     }
 
     return (
 
         <SafeAreaView style={styles.safe}>
             {/* 메뉴창 */}
-            <View style={{flex:1, marginTop:50, justifyContent:"flex-start"}}>
+            <View style={{flex:1, marginTop:50, width:left, justifyContent:"flex-start"}}>
+                <Text
+                style={{fontSize:30, paddingLeft: 20, borderBottom:10}}
+                >{route.params.teamName}</Text>
                 <FlatList
                     style={{flex:1}}
                     data={teamMembers}
-                    renderItem={({item})=>{
-                        return (
-                            <View>
-                                <Text>{item.id}</Text>
-                                <Text>{item.nickname}</Text>
-                            </View>
-                        )
-                    }}
+                    renderItem={renderTeamMemberItem}
                     keyExtractor={item => item.id}
                 />
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: 'yellow',
+                        padding: 20,
+                        margin: 10,
+                        borderRadius: 20,
+                    }}
+                >
+                    <Text>팀원 초대</Text>
+                </TouchableOpacity>
             </View>
 
             {/* 캘린더 */}
