@@ -35,6 +35,7 @@ const TeamRoom = ({route, navigation})=>{
     const [month, setMonth] = useState(0)
     const [first, setFirst] = useState(true)
 
+    const [inviteModal, setInviteModal] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
 
@@ -187,6 +188,7 @@ const TeamRoom = ({route, navigation})=>{
                         margin: 10,
                         borderRadius: 20,
                     }}
+                    onPress={()=>setInviteModal(!inviteModal)}
                 >
                     <Text>팀원 초대</Text>
                 </TouchableOpacity>
@@ -230,6 +232,49 @@ const TeamRoom = ({route, navigation})=>{
                     }}
                     showClosingKnob={true}
                 />
+
+                {/* 팀원 초대 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={inviteModal}
+                    onRequestClose={() => {
+                        setInviteModal(!inviteModal);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                            <TextInput
+                                multiline
+                                editable
+                                style={styles.input}
+                                placeholder="일정을 등록하세요"
+                                onChangeText={setInput}
+                                value={input}
+                            />
+                            <View style={{ flexDirection: "row" }}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => {
+                                        setInviteModal(!inviteModal)
+                                    }}
+                                >
+                                    <Text style={styles.textStyle}>input</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setInviteModal(!inviteModal)}
+                                >
+                                    <Text style={styles.textStyle}>cancel</Text>
+                                </Pressable>
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
+                
+
 
                 {/* 일정 삭제 모달 */}
                 <Modal
