@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from "react";
-import { Text, SafeAreaView, View, StyleSheet, Modal, Pressable, TextInput, TouchableOpacity, FlatList} from "react-native";
+import { 
+    Text, SafeAreaView, View, StyleSheet, Modal, Pressable, 
+    TextInput, TouchableOpacity, FlatList
+} from "react-native";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
@@ -13,6 +16,21 @@ const TeamRoom = ({route, navigation})=>{
         '2022-05-24': [],
         '2022-05-25': [{ name: 'item 3 - any js object', id:123 }, { name: 'any js object', id:124 }]
     })
+    const [teamMembers, setTeamMembers] = useState([
+        {
+            id : '18011646',
+            nickname : 'test1'
+        },
+        {
+            id : '12345678',
+            nickname : 'test2'
+        },
+        {
+            id : '56781234',
+            nickname : 'test3'
+        }
+    ])
+    
 
     const [month, setMonth] = useState(0)
     const [first, setFirst] = useState(true)
@@ -27,7 +45,7 @@ const TeamRoom = ({route, navigation})=>{
     useEffect(()=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
-
+        console.log(teamMembers)
     }, [input, showMenu])
 
     const setEmptyMonth = (year,month)=>{
@@ -57,7 +75,7 @@ const TeamRoom = ({route, navigation})=>{
                 {/* <Text>{`🍪`}</Text> */}
             </TouchableOpacity>
         );
-      };
+    };
 
     const renderModal = (date) => {
         setSelectedDate(date)
@@ -71,8 +89,9 @@ const TeamRoom = ({route, navigation})=>{
         setItems(tmp)
     }
 
-    const getProfileImage = ()=>{
-
+    const getProfileImage = async ()=>{
+         let profile = await getKakaoProfile()
+         console.log("profile image url : " + profile.profileImageUrl)
     }
 
     const getSchedules = async ()=>{
@@ -89,73 +108,120 @@ const TeamRoom = ({route, navigation})=>{
     const addSchedule2 = async ()=>{
         let userId = await AsyncStorage.getItem("userId")
         console.log(userId)
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ 
-        //         'teamId' : teamId, 
-        //         'userId' : userId, 
-        //         ''})
-        // };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'teamId' : teamId, 
+                'userId' : userId, 
+                'content' : content
+            })
+        };
         // fetch('http:/localhost:8080/team/schedules', requestOptions)
         //     .then(response => response.json())
     }
 
-    return (
-        <SafeAreaView style={styles.safe}>
-            <View style={{marginTop:50, justifyContent:"flex-start"}}>
-                <Text>weoijfwefoij</Text>
-                
-            </View>
-            <View style={{flexGrow:1, position:"absolute", top:50, bottom:0, left:left, right:0}}>
-            <TouchableOpacity
-                style={{width:50, alignItems:"flex-end"}}
-                onPress={async ()=>{
-                    console.log("pressed")
-                    setShowMenu(!showMenu)
-                }}
-            >
-                <Icon 
-                size={25}
-                style={{marginLeft:10, marginBottom:10}}
-                name={'navicon'} 
-                color={"black"}/>
-            </TouchableOpacity>
-            <Agenda
-                styles={{flex:4}}
-                items={items}
-                renderItem={renderItem}
-                loadItemsForMonth={async date=>{
-                    // 처음에 1회만 실행
-                    if(first){
-                        setMonth(date.month+1)
-                        setEmptyMonth(date.year, date.month+1)
-                        setFirst(!first)
-                    }
-                }}
-                onDayPress={(date)=>{
-                    if(month != date.month){
-                        setMonth(date.month)
-                        setEmptyMonth(date.year, date.month)
-                    }
-                }}
-                onDayLongPress={(day)=>{
-                    renderModal(day.dateString)
-                }}
-                showClosingKnob={true}
-            />
+    const getTeamMembers = ()=>{
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'teamId' : teamId, 
+            })
+        };
 
-            {/* 일정 삭제 모달 */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={deleteModal}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setDeleteModal(!deleteModal)
-                }}
-            >
-                <View style={{marginTop:"165%", marginBottom:"10%"}}>
+        //반환형식
+        // {
+        //     {
+        //         nickname : "user1"
+        //     }, 
+        //     {
+        //         nickname : "user2"
+        //     },
+        //     {
+        //         nickname : "user3"
+        //     } ....
+        // }
+    }
+
+
+    const renderTeamMemberItem = ({item})=>{
+        <View>
+            <Text>{item.id}</Text>
+            <Text>{item.nickname}</Text>
+        </View>
+    }
+
+    return (
+
+        <SafeAreaView style={styles.safe}>
+            {/* 메뉴창 */}
+            <View style={{flex:1, marginTop:50, justifyContent:"flex-start"}}>
+                <FlatList
+                    style={{flex:1}}
+                    data={teamMembers}
+                    renderItem={({item})=>{
+                        return (
+                            <View>
+                                <Text>{item.id}</Text>
+                                <Text>{item.nickname}</Text>
+                            </View>
+                        )
+                    }}
+                    keyExtractor={item => item.id}
+                />
+            </View>
+
+            {/* 캘린더 */}
+            <View style={{flexGrow:1, position:"absolute", top:50, bottom:0, left:left, right:0}}>
+                <TouchableOpacity
+                    style={{ width: 50, alignItems: "flex-end" }}
+                    onPress={async () => {
+                        console.log("pressed")
+                        setShowMenu(!showMenu)
+                    }}
+                >
+                    <Icon
+                        size={25}
+                        style={{ marginLeft: 10, marginBottom: 10 }}
+                        name={'navicon'}
+                        color={"black"} />
+                </TouchableOpacity>
+                <Agenda
+                    styles={{ flex: 4 }}
+                    items={items}
+                    renderItem={renderItem}
+                    loadItemsForMonth={async date => {
+                        // 처음에 1회만 실행
+                        if (first) {
+                            setMonth(date.month + 1)
+                            setEmptyMonth(date.year, date.month + 1)
+                            setFirst(!first)
+                        }
+                    }}
+                    onDayPress={(date) => {
+                        if (month != date.month) {
+                            setMonth(date.month)
+                            setEmptyMonth(date.year, date.month)
+                        }
+                    }}
+                    onDayLongPress={(day) => {
+                        renderModal(day.dateString)
+                    }}
+                    showClosingKnob={true}
+                />
+
+                {/* 일정 삭제 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={deleteModal}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setDeleteModal(!deleteModal)
+                    }}
+                >
+                    <View style={{ marginTop: "165%", marginBottom: "10%" }}>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setDeleteModal(!deleteModal)}
@@ -168,52 +234,52 @@ const TeamRoom = ({route, navigation})=>{
                         >
                             <Text style={styles.textStyle}>취소</Text>
                         </Pressable>
-                </View>
-            </Modal>
-      
-            {/* 일정 등록 모달 */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <TextInput
-                            multiline
-                            editable
-                            style={styles.input}
-                            placeholder="일정을 등록하세요" 
-                            onChangeText={setInput}
-                            value={input}
-                            />
-                        <View style={{ flexDirection: "row" }}>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => {
-                                    console.log(input)
-                                    addSchedule()
-                                    setModalVisible(!modalVisible)
-                                }}
-                            >
-                                <Text style={styles.textStyle}>input</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModalVisible(!modalVisible)}
-                            >
-                                <Text style={styles.textStyle}>cancel</Text>
-                            </Pressable>
-                        </View>
-
                     </View>
-                </View>
-            </Modal>
+                </Modal>
+
+                {/* 일정 등록 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                            <TextInput
+                                multiline
+                                editable
+                                style={styles.input}
+                                placeholder="일정을 등록하세요"
+                                onChangeText={setInput}
+                                value={input}
+                            />
+                            <View style={{ flexDirection: "row" }}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => {
+                                        console.log(input)
+                                        addSchedule()
+                                        setModalVisible(!modalVisible)
+                                    }}
+                                >
+                                    <Text style={styles.textStyle}>input</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>cancel</Text>
+                                </Pressable>
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
             </View>
         </SafeAreaView>
     )

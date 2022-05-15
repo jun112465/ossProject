@@ -33,7 +33,9 @@ export default ({navigation})=>{
     userId = profile.id
     userNickname = profile.nickname
     // saveUserInfo(userId, userNickname)
+    console.log(profile)
     console.log("getProfile : " + userId, userNickname)
+    console.log("profile Image Url : " + profile.profileImageUrl)
     // AsyncStorage.setItem("userId", profile.id)
     // AsyncStorage.setItem("userNickName", profile.nickname)
     // setResult(JSON.stringify(profile))
