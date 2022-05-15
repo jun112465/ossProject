@@ -10,12 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TeamRoom = ({route, navigation})=>{
 
+    // 일정 목록
     const [items, setItems] = useState({
         '2022-05-22': [{ name: 'item 1 - any js object', id:121 }],
         '2022-05-23': [{ name: 'item 2 - any js object', height: 80, id:122 }],
         '2022-05-24': [],
         '2022-05-25': [{ name: 'item 3 - any js object', id:123 }, { name: 'any js object', id:124 }]
     })
+    // 팀원 목록
     const [teamMembers, setTeamMembers] = useState([
         {
             id : '18011646',
@@ -31,27 +33,31 @@ const TeamRoom = ({route, navigation})=>{
         }
     ])
     
-
+    // 캘린더 관련
     const [month, setMonth] = useState(0)
     const [first, setFirst] = useState(true)
+    const [selectedDate, setSelectedDate] = useState();
 
+    // 모달 관련 state
     const [inviteModal, setInviteModal] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
 
-    const [selectedDate, setSelectedDate] = useState();
+    // 메뉴 관련
     const [input, setInput] = useState("")
-
     const [showMenu, setShowMenu] = useState(false)
     const [left,setLeft] = useState(0)
 
     useEffect(()=>{
+        // 메뉴 보이게 하기 위한 조건문
         if(showMenu) setLeft(170)
         else setLeft(0)
+
         console.log(teamMembers)
         console.log({route})
     }, [input, showMenu])
 
+    //선택 month의 모든 요일별 빈 아이템 목록 생성
     const setEmptyMonth = (year,month)=>{
         let daysOfMonth = new Date(year, month, 0).getDate()
         let tmp = {}
@@ -65,8 +71,8 @@ const TeamRoom = ({route, navigation})=>{
         setItems(tmp)
     }
 
-
-    const renderItem = (item) => {
+    // 일정 아이템들 렌더링 함수
+    const renderScheduleItem = (item) => {
         return (
             <TouchableOpacity 
                 style={styles.itemContainer}
@@ -79,8 +85,9 @@ const TeamRoom = ({route, navigation})=>{
                 {/* <Text>{`🍪`}</Text> */}
             </TouchableOpacity>
         );
-    };
+    }
 
+    // 일정 추가 모달 렌더링 함수
     const renderModal = (date) => {
         setSelectedDate(date)
         setModalVisible(!modalVisible)
@@ -212,7 +219,7 @@ const TeamRoom = ({route, navigation})=>{
                 <Agenda
                     styles={{ flex: 4 }}
                     items={items}
-                    renderItem={renderItem}
+                    renderItem={renderScheduleItem}
                     loadItemsForMonth={async date => {
                         // 처음에 1회만 실행
                         if (first) {
@@ -249,7 +256,7 @@ const TeamRoom = ({route, navigation})=>{
                                 multiline
                                 editable
                                 style={styles.input}
-                                placeholder="일정을 등록하세요"
+                                placeholder="초대할 팀원의 ID를 입력하세요"
                                 onChangeText={setInput}
                                 value={input}
                             />
@@ -341,7 +348,6 @@ const TeamRoom = ({route, navigation})=>{
                                     <Text style={styles.textStyle}>cancel</Text>
                                 </Pressable>
                             </View>
-
                         </View>
                     </View>
                 </Modal>
