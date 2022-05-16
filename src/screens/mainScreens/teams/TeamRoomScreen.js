@@ -5,8 +5,10 @@ import {
 } from "react-native";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconEntypo from 'react-native-vector-icons/Entypo';
 import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { black, white } from "react-native-paper/lib/typescript/src/styles/colors";
 
 const TeamRoom = ({route, navigation})=>{
 
@@ -53,7 +55,7 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        console.log(teamMembers)
+        // console.log(teamMembers)
         console.log({route})
     }, [input, showMenu])
 
@@ -161,15 +163,16 @@ const TeamRoom = ({route, navigation})=>{
         return (
             <TouchableOpacity
             style={{
-                backgroundColor: 'coral',
-                padding: 20,
-                marginVertical: 15,
-                marginHorizontal: 10,
+                borderColor: 'black',
+                margin : 10,
                 borderRadius: 20,
                 top: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
             }}>
-                <Text>{item.id}</Text>
-                <Text>{item.nickname}</Text>
+                <Icon style={{fontSize: 30, textAlign:"center", marginRight:5}}name={"github"}/>
+                <Text style={{fontSize: 20, textAlignVertical:"center"}}>{item.nickname}</Text>
             </TouchableOpacity>
         )
     }
@@ -178,31 +181,48 @@ const TeamRoom = ({route, navigation})=>{
 
         <SafeAreaView style={styles.safe}>
             {/* 메뉴창 */}
-            <View style={{flex:1, marginTop:50, width:left, justifyContent:"flex-start"}}>
-                <Text
-                style={{fontSize:30, paddingLeft: 20, borderBottom:10}}
-                >{route.params.teamName}</Text>
-                <FlatList
-                    style={{flex:1}}
-                    data={teamMembers}
-                    renderItem={renderTeamMemberItem}
-                    keyExtractor={item => item.id}
-                />
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: 'yellow',
-                        padding: 20,
-                        margin: 10,
-                        borderRadius: 20,
-                    }}
-                    onPress={()=>setInviteModal(!inviteModal)}
-                >
-                    <Text>팀원 초대</Text>
-                </TouchableOpacity>
+            <View style={{
+                flex:1,width:left,
+            }}>
+
+                <View style={{margin: 10}}>
+                    <Text style={{ marginHorizontal: 10, fontSize: 16, fontWeight: "bold" }}>- TeamName</Text>
+                    <Text style={{ fontSize: 30, padding: 10, borderBottomWidth: 1 }}>
+                        {route.params.teamName}
+                    </Text>
+                </View>
+
+                <View style={{margin: 10}}>
+                    <Text style={{ marginHorizontal: 10, fontSize: 16, fontWeight: "bold" }}>- Add</Text>
+                    <TouchableOpacity
+                        style={{
+                            padding: 20,
+                            margin: 10,
+                            borderRadius: 20,
+                            flexDirection: "row",
+                            alignItems: "center"
+                        }}
+                        onPress={() => setInviteModal(!inviteModal)}
+                    >
+                        <Icon name={"user-plus"} style={{ fontSize: 30, marginRight: 5 }} />
+                        <Text style={{ fontSize: 15 }}>팀원 초대</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{margin:10, flex: 1}}>
+                    <Text style={{ marginHorizontal: 10, fontSize: 16, fontWeight: "bold" }}>- Members</Text>
+                    <FlatList
+                        style={{ flex: 1, borderBottomWidth: 1, borderColor: 'white' }}
+                        data={teamMembers}
+                        renderItem={renderTeamMemberItem}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
+
             </View>
 
             {/* 캘린더 */}
-            <View style={{flexGrow:1, position:"absolute", top:50, bottom:0, left:left, right:0}}>
+            <View style={{flex:1, position: 'absolute', top:50, bottom:0, left:left, right:0}}>
                 <TouchableOpacity
                     style={{ width: 50, alignItems: "flex-end" }}
                     onPress={async () => {

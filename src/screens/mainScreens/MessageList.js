@@ -4,38 +4,43 @@ import { SafeAreaView, View, FlatList, StyleSheet,
     ActivityIndicator, Linking, Modal, Pressable} from 'react-native';
 import { black } from 'react-native-paper/lib/typescript/src/styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DATA = [
     {
         type : 'inviteLink',
-        id: '5',
-        title : "www.naver.com", 
+        msgId: '5',
+        from : 'nickname1',
+        content : "www.naver.com", 
         teamId : '123',
         teamName : '오픈소스SW',
     },
     {
         type : 'inviteLink', 
-        id: '1',
-        title: "Nostrud est nostrud nostrud exercitation. Proident laborum anim non aliqua aliquip ipsum sint minim dolor laboris fugiat. Minim duis officia voluptate proident et laboris aliquip id elit dolore irure laborum incididunt. Non qui pariatur commodo commodo quis laboris. Exercitation ut exercitation in nulla elit magna non. Do id laborum et et ullamco elit adipisicing voluptate ad dolor excepteur. Nostrud laboris anim est id amet." ,
+        msgId: '1',
+        from : 'nickname2',
+        content : "Nostrud est nostrud nostrud exercitation. Proident laborum anim non aliqua aliquip ipsum sint minim dolor laboris fugiat. Minim duis officia voluptate proident et laboris aliquip id elit dolore irure laborum incididunt. Non qui pariatur commodo commodo quis laboris. Exercitation ut exercitation in nulla elit magna non. Do id laborum et et ullamco elit adipisicing voluptate ad dolor excepteur. Nostrud laboris anim est id amet." ,
         teamId : '234',
         teamName : '데이터베이스'
     },
     {
         type : 'message',
-        id: '3',
-        title: "Laboris aliquip consequat ea veniam irure incididunt. Ea ullamco qui sit magna deserunt ea consequat occaecat. Fugiat officia eu ex adipisicing consectetur anim amet. Pariatur anim deserunt exercitation aliqua labore. Ut irure qui irure velit commodo nisi est enim et ea.",
+        msgId : '3',
+        from : 'nickname3',
+        content : "Laboris aliquip consequat ea veniam irure incididunt. Ea ullamco qui sit magna deserunt ea consequat occaecat. Fugiat officia eu ex adipisicing consectetur anim amet. Pariatur anim deserunt exercitation aliqua labore. Ut irure qui irure velit commodo nisi est enim et ea.",
     },
     {
         type : 'message',
-        id: '4',
-        title: "Pariatur ad dolore tempor cupidatat deserunt aliqua. Nulla non qui anim ea et exercitation deserunt. Commodo dolor qui anim qui veniam non ad. Pariatur laborum deserunt incididunt sunt est consequat eu tempor mollit reprehenderit adipisicing ex veniam. Quis minim esse veniam reprehenderit enim mollit sit culpa.",
+        msgId : '4',
+        from : 'nickname2',
+        content : "Pariatur ad dolore tempor cupidatat deserunt aliqua. Nulla non qui anim ea et exercitation deserunt. Commodo dolor qui anim qui veniam non ad. Pariatur laborum deserunt incididunt sunt est consequat eu tempor mollit reprehenderit adipisicing ex veniam. Quis minim esse veniam reprehenderit enim mollit sit culpa.",
     },
 ];
 
 
 
 
-const MessageList = ({route,navigation}) => {
+const MessageList = ({userId, navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [deleteModal, setDeleteModal] = useState(false)
@@ -74,30 +79,32 @@ const MessageList = ({route,navigation}) => {
     const touchMessage = (id)=>{
         setMsg(id)
         setDeleteModal(!deleteModal)
-        console.log(msg)
     }
 
     const Item = ({item}) => {
         // 일반 메세지 
         if (item.type == "message") return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={()=>touchMessage(item.id)}>
-                    <Text style={styles.title}>제목</Text>
-                    <Text style={styles.content}>{item.title}</Text>
+                <TouchableOpacity onPress={()=>touchMessage(item.msgId)}>
+                    <Text style={styles.title}>From. {item.from}</Text>
+                    <Text style={styles.content}>{item.content}</Text>
                 </TouchableOpacity>
             </View>
         )
         // 초대 링크
         else return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={() => touchMessage(item.id)}>
+                <TouchableOpacity onPress={async () => await touchMessage(item.msgId)}>
+                    <Text style={styles.title}>From. {item.from}</Text>
                     <Text style={styles.content}>{item.teamName} 팀으로 초대되었습니다. 아래 링크를 클릭 시 팀에 참여합니다.</Text>
                     <View style={{flexDirection:'row'}}>
                         <Icon style={{ fontSize: 30, margin: 10 }} name={"group"} />
                         <Text style={{ fontSize: 30, color: 'green', marginTop: 10 }}
                             onPress={() => {
+                                let url = `http://localhost:8080/inviteCode?teamId=${item.teamId}&userId=${userId}`
+                                console.log(url)
                                 Linking.openURL('http://google.com')
-                                navigation.navigate("Message")
+                                navigation.navigate("TeamStack")
                             }}>
                            linkToTeam 
                         </Text>
@@ -110,7 +117,7 @@ const MessageList = ({route,navigation}) => {
 
     useEffect(() => {
         // getMovies();
-        getPosts();
+        // getPosts();
     }, []);
 
 

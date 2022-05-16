@@ -66,9 +66,11 @@ export default ({navigation})=>{
       await signInWithKakao();
       await getProfile();
       await sendData()
-      await saveUserInfo(profile.id.toString(), profile.nickname)
+      // await saveUserInfo(profile.id.toString(), profile.nickname)
       
-      navigation.navigate("MainRouter")
+      navigation.navigate("MainRouter", {
+        userId : profile.id.toString(),
+      })
     }
     loginFunc()
   })

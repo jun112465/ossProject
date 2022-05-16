@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SettingsScreen from './SettingsScreen'
@@ -7,30 +7,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BoardStack from './board/BoardStack';
 import TeamStack from './teams/TeamStack'
-import MessageStack from './message/MessageStack'
+import MessageList from './MessageList'
 
 const Tab = createBottomTabNavigator();
-export default function MainRouter(size, color) {
+export default function MainRouter({route, navigation}) {
     useEffect(()=>{
-        console.log("mainRouter Screen")
-
-        let a = async ()=>{
-            let item = await AsyncStorage.getItem("accessToken")
-            let id = await AsyncStorage.getItem("userId")
-            console.log(item)
-            console.log(id)
-        }
-        a()
+        // 객체타입과 스트링을 +로 콘솔에 찍게되면 제대로 출력이 안된다.
+        // 반드시 ,를 이용해 출력하도록 하자.
+        console.log("MainRouter Props :", route.params)
     })
     return (
         <Tab.Navigator screenOptions={{ headerShown: false}}>
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="BoardStack"
                 // component={BoardScreen}
                 component={BoardStack}
                 options={{
                     tabBarIcon: ({size,color}) => (<Icon name={"home"} color={color} size={size}/>)
-                }} />
+                }} /> */}
             <Tab.Screen
                 name="TeamStack"
                 component={TeamStack}
@@ -38,8 +32,11 @@ export default function MainRouter(size, color) {
                     tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
                 }} />
             <Tab.Screen
-                name="MessageStack"
-                component={MessageStack}
+                name="MessageList"
+                children={()=><MessageList 
+                    userId={route.params.userId} 
+                    navigation={navigation}
+                />}
                 options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"envelope"} color={color} size={size} />)
                 }} />

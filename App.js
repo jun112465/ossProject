@@ -5,11 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorageScreen from './src/examples/AsyncStorageScreen';
 //화면목록
 import Home from './src/screens/Home'
-import Login from './src/screens/Login'
-import SignUp from './src/screens/SignUp'
-import MainRouter from './src/screens/mainScreens/mainRouter';
+import MainRouter from './src/screens/mainScreens/MainRouter';
 
-import kakaoLogin from './src/screens/kakaoLogin';
+import kakaoLogin from './src/screens/KakaoLogin';
 
 //이동할 수 있는 화면들의 스택
 const Stack = createNativeStackNavigator();

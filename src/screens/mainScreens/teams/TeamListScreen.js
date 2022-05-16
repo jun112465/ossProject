@@ -26,7 +26,7 @@ const DATA = [
 const TeamListScreen = ({navigation}) => {
     const [teamList, setTeamList] = useState([])
     useEffect(()=>{
-        getTeamList()
+        // getTeamList()
     })
 
     const getTeamList = async () => {
@@ -53,7 +53,7 @@ const TeamListScreen = ({navigation}) => {
             <TouchableOpacity onPress={() => { navigation.navigate("TeamRoom", {
                 teamName : title,
             })}}>
-                <Text style={styles.title}>단톡방 입장</Text>
+                <Text style={styles.title}>{title}</Text>
                 <Text style={styles.content}>{title}</Text>
             </TouchableOpacity>
 
@@ -66,7 +66,7 @@ const TeamListScreen = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
-                style={{flex:1}}
+                style={{flex:1, margin: 7}}
                 data={DATA}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item: {
-        backgroundColor: 'coral',
+        backgroundColor: 'lightgrey',
+        borderRadius: 30,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
