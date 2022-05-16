@@ -1,34 +1,45 @@
 import React, {useEffect, useState} from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, 
+    Text, StatusBar, Button, TouchableOpacity, 
+    ActivityIndicator, Linking, Modal, Pressable} from 'react-native';
+import { black } from 'react-native-paper/lib/typescript/src/styles/colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const DATA = [
     {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: "Nostrud est nostrud nostrud exercitation. Proident laborum anim non aliqua aliquip ipsum sint minim dolor laboris fugiat. Minim duis officia voluptate proident et laboris aliquip id elit dolore irure laborum incididunt. Non qui pariatur commodo commodo quis laboris. Exercitation ut exercitation in nulla elit magna non. Do id laborum et et ullamco elit adipisicing voluptate ad dolor excepteur. Nostrud laboris anim est id amet." 
+        type : 'inviteLink',
+        id: '5',
+        title : "www.naver.com", 
+        teamId : '123',
+        teamName : '오픈소스SW',
     },
     {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        type : 'inviteLink', 
+        id: '1',
+        title: "Nostrud est nostrud nostrud exercitation. Proident laborum anim non aliqua aliquip ipsum sint minim dolor laboris fugiat. Minim duis officia voluptate proident et laboris aliquip id elit dolore irure laborum incididunt. Non qui pariatur commodo commodo quis laboris. Exercitation ut exercitation in nulla elit magna non. Do id laborum et et ullamco elit adipisicing voluptate ad dolor excepteur. Nostrud laboris anim est id amet." ,
+        teamId : '234',
+        teamName : '데이터베이스'
+    },
+    {
+        type : 'message',
+        id: '3',
         title: "Laboris aliquip consequat ea veniam irure incididunt. Ea ullamco qui sit magna deserunt ea consequat occaecat. Fugiat officia eu ex adipisicing consectetur anim amet. Pariatur anim deserunt exercitation aliqua labore. Ut irure qui irure velit commodo nisi est enim et ea.",
     },
     {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        type : 'message',
+        id: '4',
         title: "Pariatur ad dolore tempor cupidatat deserunt aliqua. Nulla non qui anim ea et exercitation deserunt. Commodo dolor qui anim qui veniam non ad. Pariatur laborum deserunt incididunt sunt est consequat eu tempor mollit reprehenderit adipisicing ex veniam. Quis minim esse veniam reprehenderit enim mollit sit culpa.",
     },
 ];
 
-const Item = ({title }) => (
-    <View style={styles.item}>
-        <TouchableOpacity onPress={() => { alert('Hi') }}>
-            <Text style={styles.title}>제목</Text>
-            <Text style={styles.content}>{title}</Text>
-        </TouchableOpacity>
-    </View>
-);
+
 
 
 const MessageList = ({route,navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [msg, setMsg] = useState(0)
 
     //영화 5개 불러오는 예제 데이터
     const getMovies = async () => {
@@ -58,8 +69,44 @@ const MessageList = ({route,navigation}) => {
             setLoading(false);
             console.log("data fetched");
         }
-
     }
+
+    const touchMessage = (id)=>{
+        setMsg(id)
+        setDeleteModal(!deleteModal)
+        console.log(msg)
+    }
+
+    const Item = ({item}) => {
+        // 일반 메세지 
+        if (item.type == "message") return (
+            <View style={styles.item}>
+                <TouchableOpacity onPress={()=>touchMessage(item.id)}>
+                    <Text style={styles.title}>제목</Text>
+                    <Text style={styles.content}>{item.title}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+        // 초대 링크
+        else return (
+            <View style={styles.item}>
+                <TouchableOpacity onPress={() => touchMessage(item.id)}>
+                    <Text style={styles.content}>{item.teamName} 팀으로 초대되었습니다. 아래 링크를 클릭 시 팀에 참여합니다.</Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Icon style={{ fontSize: 30, margin: 10 }} name={"group"} />
+                        <Text style={{ fontSize: 30, color: 'green', marginTop: 10 }}
+                            onPress={() => {
+                                Linking.openURL('http://google.com')
+                                navigation.navigate("Message")
+                            }}>
+                           linkToTeam 
+                        </Text>
+                    </View>
+
+                </TouchableOpacity>
+            </View>
+        )
+    };
 
     useEffect(() => {
         // getMovies();
@@ -68,21 +115,53 @@ const MessageList = ({route,navigation}) => {
 
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} />
+        <Item item={item} />
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{ flex: 1, padding: 24 }}>
+            {/* <View style={{ flex: 1, padding: 24 }}>
                 {isLoading ? <ActivityIndicator /> : (
                     <FlatList
-                        data={data}
+                        data={DATA}
                         // keyExtractor가 뭔지 알아보기
-                        // keyExtractor={({ id }, index) => id}
+                        keyExtractor={({ id }) => id}
                         renderItem={renderItem}
                     />
                 )}
-            </View>
+            </View> */}
+            <FlatList
+                style={{flex:1}}
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+            />
+
+            {/* 메세지 삭제 모달 */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={deleteModal}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setDeleteModal(!deleteModal)
+                }}
+            >
+                <View style={{ marginTop: "165%", marginBottom: "10%" }}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setDeleteModal(!deleteModal)}
+                    >
+                        <Text style={styles.textStyle}>메세지 삭제</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setDeleteModal(!deleteModal)}
+                    >
+                        <Text style={styles.textStyle}>취소</Text>
+                    </Pressable>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
@@ -93,7 +172,8 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item: {
-        backgroundColor: '#f9c2ff',
+        backgroundColor: 'lightgrey',
+        borderRadius: 30,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
@@ -104,7 +184,24 @@ const styles = StyleSheet.create({
     },
     content: {
         fontSize: 14,
-    }
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        margin: 10
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
 });
 
 export default MessageList;
