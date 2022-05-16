@@ -8,7 +8,9 @@ import TeamRoom from './TeamRoomScreen'
 const TeamStack = createNativeStackNavigator();
 const App = ()=>{
     return (
-        <TeamStack.Navigator>
+        <TeamStack.Navigator
+            screenOptions={{headerShown:false}}
+        >
             <TeamStack.Screen name="TeamList" component={TeamList} />
             <TeamStack.Screen 
             name="TeamRoom" 
