@@ -47,9 +47,9 @@ const MessageList = ({userId, navigation}) => {
     const [msg, setMsg] = useState(0)
 
     //영화 5개 불러오는 예제 데이터
-    const getMovies = async () => {
+    const getMessages = async () => {
         try {
-            const response = await fetch('https://reactnative.dev/movies.json');
+            const response = await fetch(`https://localhost:8080/messages?userId=${userId}`);
             const json = await response.json();
             setData(json.movies);
         } catch (error) {
