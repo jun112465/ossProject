@@ -23,35 +23,29 @@ const DATA = [
 
 
 
-const TeamListScreen = ({navigation}) => {
+const TeamListScreen = ({route, navigation}) => {
     const [teamList, setTeamList] = useState([])
+
     useEffect(()=>{
         // getTeamList()
+        console.log("TeamListScreen : ", route.params)
+        getTeamList()
     })
 
     const getTeamList = async () => {
-        id = await AsyncStorage.getItem("userId")
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'id': id })
-        };
-        await fetch('http:/localhost:8080/team/teamlist', requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                tmp = []
-                for(let d in data){
-                    console.log(d)
-                }
-            })
+        let data = await fetch(`http:/localhost:8080/team/get?user_id=${userId}`)
+        let json = await data.json()
+        console.log(json)
     }
     
 
 
-    const Item = ({title}) => (
+    const Item = ({title, id}) => (
         <View style={styles.item}>
             <TouchableOpacity onPress={() => { navigation.navigate("TeamRoom", {
                 teamName : title,
+                teamId : id,
+                userId : userId,
             })}}>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.content}>{title}</Text>
@@ -60,8 +54,25 @@ const TeamListScreen = ({navigation}) => {
         </View>
     );
     const renderItem = ({ item }) => (
-        <Item title={item.teamName} />
+        <Item title={item.teamName} id={item.teamId}/>
     );
+
+    const createTeam = (teamName)=>{
+        fetch(`http:/localhost:8080/team/add?team_name=${teamName}`)
+            .then(response => response.json())
+    }
+
+    const deleteTeam = (teamId)=>{
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'teamId' : teamId, 
+            })
+        };
+        fetch('http:/localhost:8080/schedules/add', requestOptions)
+            .then(response => response.json())
+    }
 
     return (
         <SafeAreaView style={styles.container}>

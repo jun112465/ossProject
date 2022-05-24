@@ -9,8 +9,11 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { black, white } from "react-native-paper/lib/typescript/src/styles/colors";
+import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 const TeamRoom = ({route, navigation})=>{
+    const userId = route.params.userId;
+    const teamId = route.params.teamId;
 
     // 일정 목록
     const [items, setItems] = useState({
@@ -55,8 +58,10 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        // console.log(teamMembers)
-        console.log({route})
+        console.log("TeamRoomScreen")
+        console.log(teamId)
+        getSchedules()
+        getTeamMembers()
     }, [input, showMenu])
 
     //선택 month의 모든 요일별 빈 아이템 목록 생성
@@ -108,20 +113,12 @@ const TeamRoom = ({route, navigation})=>{
     }
 
     const getSchedules = async ()=>{
-        let userId = await AsyncStorage.getItem("userId")
-        console.log(userId)
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'teamId' : teamId })
-        };
-        fetch('http:/localhost:8080/team/schedules', requestOptions)
-            .then(response => response.json())
+        const response = await fetch(`http:/localhost:8080/schedule/get?team_id=${teamId}`)
+        const data = await response.json()
+        console.log(data)
     }
 
     const addSchedule2 = async ()=>{
-        let userId = await AsyncStorage.getItem("userId")
-        console.log(userId)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -131,31 +128,15 @@ const TeamRoom = ({route, navigation})=>{
                 'content' : content
             })
         };
-        // fetch('http:/localhost:8080/team/schedules', requestOptions)
-        //     .then(response => response.json())
+        fetch('http:/localhost:8080/schedules/add', requestOptions)
+            .then(response => response.json())
     }
 
-    const getTeamMembers = ()=>{
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                'teamId' : teamId, 
-            })
-        };
-
-        //반환형식
-        // {
-        //     {
-        //         nickname : "user1"
-        //     }, 
-        //     {
-        //         nickname : "user2"
-        //     },
-        //     {
-        //         nickname : "user3"
-        //     } ....
-        // }
+    const getTeamMembers = async ()=>{
+        const response = await fetch(`http:/localhost:8080/team/get_members?team_id=${teamId}`)
+        // const response = await fetch(`http://localhost:8080/team/get_members?team_id=3`)
+        const json = await response.json();
+        console.log(json)
     }
 
 
@@ -176,6 +157,7 @@ const TeamRoom = ({route, navigation})=>{
             </TouchableOpacity>
         )
     }
+
 
     return (
 

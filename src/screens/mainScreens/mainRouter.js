@@ -27,10 +27,11 @@ export default function MainRouter({route, navigation}) {
                 }} /> */}
             <Tab.Screen
                 name="TeamStack"
-                component={TeamStack}
-                options={{
-                    tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
-                }} />
+                children={()=><TeamStack 
+                    userId={route.params.userId} 
+                    navigation={navigation}
+                />}
+            />
             <Tab.Screen
                 name="MessageList"
                 children={()=><MessageList 

@@ -48,32 +48,36 @@ const MessageList = ({userId, navigation}) => {
 
     //영화 5개 불러오는 예제 데이터
     const getMessages = async () => {
-        try {
-            const response = await fetch(`https://localhost:8080/messages?userId=${userId}`);
-            const json = await response.json();
-            setData(json.movies);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
+        const resp = await fetch(`http://localhost:8080/message/get?user_id=${userId}`);
+        const json = await resp.json();
+        console.log(json)
     }
 
-    // 게시글 100개 불러오는 예제 데이터
-    // 무한 스크롤 적용 예정
-    const getPosts = async()=>{
-        try{
-            const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-            const json = await response.json();
-            // 데이터 20개만 일단 설정해주기
-            setData(json.slice(0,20)); 
-            console.log(json[0]);
-        }catch(error){
-            console.error(error)
-        }finally{
-            setLoading(false);
-            console.log("data fetched");
-        }
+    const deleteMessages = async ()=>{
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'userId' : userId,
+                'msgId' : msgId
+            })
+        };
+        fetch('http:/localhost:8080/schedules/add', requestOptions)
+            .then(response => response.json())
+    }
+
+    const sendMessage = async () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                'fromId' : fromId,
+                'toId' : toId,
+                'content' : content
+            })
+        };
+        fetch('http:/localhost:8080/schedules/add', requestOptions)
+            .then(response => response.json())
     }
 
     const touchMessage = (id)=>{
@@ -118,6 +122,7 @@ const MessageList = ({userId, navigation}) => {
     useEffect(() => {
         // getMovies();
         // getPosts();
+        getMessages();
     }, []);
 
 
