@@ -46,7 +46,7 @@ const TeamRoom = ({route, navigation})=>{
                 let data = await getSchedules()
                 let tmData = await getTeamMembers()
                 console.log(tmData)
-                console.log(data)
+                console.log("Schedules :", data)
                 await setSchedules(data)
                 await setTeamMembers(tmData.userList)
             }
@@ -117,7 +117,6 @@ const TeamRoom = ({route, navigation})=>{
 
     // 일정 아이템들 렌더링 함수
     const renderScheduleItem = (item) => {
-        console.log("renderScheduleItem :", item)
         return (
             <TouchableOpacity
                 style={styles.itemContainer}
@@ -126,9 +125,11 @@ const TeamRoom = ({route, navigation})=>{
                     setDeleteModal(!deleteModal)
                 }
                 }>
-                <Text>{item.name}</Text>
-                {/* <Text>{`🍪`}</Text> */}
-            </TouchableOpacity>
+                <View style={{justifyContent:"flex-start", alignItems:"flex-start"}}> 
+                    <Text style={{fontSize:12, fontWeight:"bold", textAlign:"left"}}>{item.userId}</Text>
+                    <Text>{item.content}</Text>
+                </View>
+           </TouchableOpacity>
         );
     }
 
@@ -368,11 +369,14 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 1,
         margin: 5,
         borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
         flex: 1,
+        padding: 10
     },
     centeredView: {
         flex: 1,
