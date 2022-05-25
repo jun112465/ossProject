@@ -31,6 +31,9 @@ export default function MainRouter({route, navigation}) {
                     userId={route.params.userId} 
                     navigation={navigation}
                 />}
+                options={{
+                    tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
+                }}
             />
             <Tab.Screen
                 name="MessageList"

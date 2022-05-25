@@ -15,33 +15,14 @@ const TeamRoom = ({route, navigation})=>{
     const userId = route.params.userId;
     const teamId = route.params.teamId;
 
-    // 일정 목록
-    const [items, setItems] = useState({
-        '2022-05-22': [{ name: 'item 1 - any js object', id:121 }],
-        '2022-05-23': [{ name: 'item 2 - any js object', height: 80, id:122 }],
-        '2022-05-24': [],
-        '2022-05-25': [{ name: 'item 3 - any js object', id:123 }, { name: 'any js object', id:124 }]
-    })
-    // 팀원 목록
-    const [teamMembers, setTeamMembers] = useState([
-        {
-            id : '18011646',
-            nickname : 'nickname1'
-        },
-        {
-            id : '12345678',
-            nickname : 'nickname2'
-        },
-        {
-            id : '56781234',
-            nickname : 'nickname3'
-        }
-    ])
-    
+    // loading
+    const [loading, setLoading] = useState(true)
     // 캘린더 관련
     const [month, setMonth] = useState(0)
+    const [year, setYear] = useState(0)
     const [first, setFirst] = useState(true)
     const [selectedDate, setSelectedDate] = useState();
+    const [schedules, setSchedules] = useState();
 
     // 모달 관련 state
     const [inviteModal, setInviteModal] = useState(false);
@@ -49,6 +30,7 @@ const TeamRoom = ({route, navigation})=>{
     const [deleteModal, setDeleteModal] = useState(false);
 
     // 메뉴 관련
+    const [teamMembers, setTeamMembers] = useState()
     const [input, setInput] = useState("")
     const [showMenu, setShowMenu] = useState(false)
     const [left,setLeft] = useState(0)
@@ -58,47 +40,26 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        console.log("TeamRoomScreen")
-        console.log(teamId)
-        getSchedules()
-        getTeamMembers()
-    }, [input, showMenu])
-
-    //선택 month의 모든 요일별 빈 아이템 목록 생성
-    const setEmptyMonth = (year,month)=>{
-        let daysOfMonth = new Date(year, month, 0).getDate()
-        let tmp = {}
-        for (let i = 1; i <= daysOfMonth; i++) {
-            key = year + "-" + (month).toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0')
-            tmp[key] = []
+        if(loading){
+            console.log("TeamRoomScreen")
+            let a = async () => {
+                let data = await getSchedules()
+                let tmData = await getTeamMembers()
+                console.log(tmData)
+                console.log(data)
+                await setSchedules(data)
+                await setTeamMembers(tmData.userList)
+            }
+            setLoading(!loading)
+            a()
         }
-        for(let key in items){
-            tmp[key] = items[key]
-        }
-        setItems(tmp)
-    }
+        setEmptyMonth(year, month)
 
-    // 일정 아이템들 렌더링 함수
-    const renderScheduleItem = (item) => {
-        return (
-            <TouchableOpacity 
-                style={styles.itemContainer}
-                onPress={() => {
-                    console.log("deleete")
-                    setDeleteModal(!deleteModal)
-                }
-            }>
-                <Text>{item.name}</Text>
-                {/* <Text>{`🍪`}</Text> */}
-            </TouchableOpacity>
-        );
-    }
 
-    // 일정 추가 모달 렌더링 함수
-    const renderModal = (date) => {
-        setSelectedDate(date)
-        setModalVisible(!modalVisible)
-    }
+    }, [showMenu, loading])
+    // input, showMenu
+
+    
 
     const addSchedule = ()=>{
         console.log(selectedDate)
@@ -115,7 +76,8 @@ const TeamRoom = ({route, navigation})=>{
     const getSchedules = async ()=>{
         const response = await fetch(`http:/localhost:8080/schedule/get?team_id=${teamId}`)
         const data = await response.json()
-        console.log(data)
+        // setSchedules(data.schedules)
+        return data
     }
 
     const addSchedule2 = async ()=>{
@@ -136,14 +98,51 @@ const TeamRoom = ({route, navigation})=>{
         const response = await fetch(`http:/localhost:8080/team/get_members?team_id=${teamId}`)
         // const response = await fetch(`http://localhost:8080/team/get_members?team_id=3`)
         const json = await response.json();
-        console.log(json)
+        return json
+    }
+
+    //선택 month의 모든 요일별 빈 아이템 목록 생성
+    const setEmptyMonth = async (year, month) => {
+        let daysOfMonth = new Date(year, month, 0).getDate()
+        let tmp = {}
+        for (let i = 1; i <= daysOfMonth; i++) {
+            key = year + "-" + (month).toString().padStart(2, '0') + "-" + i.toString().padStart(2, '0')
+            tmp[key] = []
+        }
+        for (let key in schedules) {
+            tmp[key] = schedules[key]
+        }
+        await setSchedules(tmp)
+    }
+
+    // 일정 아이템들 렌더링 함수
+    const renderScheduleItem = (item) => {
+        console.log("renderScheduleItem :", item)
+        return (
+            <TouchableOpacity
+                style={styles.itemContainer}
+                onPress={() => {
+                    console.log("deleete")
+                    setDeleteModal(!deleteModal)
+                }
+                }>
+                <Text>{item.name}</Text>
+                {/* <Text>{`🍪`}</Text> */}
+            </TouchableOpacity>
+        );
+    }
+
+    // 일정 추가 모달 렌더링 함수
+    const renderModal = (date) => {
+        setSelectedDate(date)
+        setModalVisible(!modalVisible)
     }
 
 
-    const renderTeamMemberItem = ({item})=>{
+    const renderTeamMemberItem = ({ item }) => {
         return (
             <TouchableOpacity
-            style={{
+                style={{
                 borderColor: 'black',
                 margin : 10,
                 borderRadius: 20,
@@ -220,7 +219,7 @@ const TeamRoom = ({route, navigation})=>{
                 </TouchableOpacity>
                 <Agenda
                     styles={{ flex: 4 }}
-                    items={items}
+                    items={schedules}
                     renderItem={renderScheduleItem}
                     loadItemsForMonth={async date => {
                         // 처음에 1회만 실행
@@ -229,6 +228,10 @@ const TeamRoom = ({route, navigation})=>{
                             setEmptyMonth(date.year, date.month + 1)
                             setFirst(!first)
                         }
+                        setYear(date.year)
+                        setMonth(date.month + 1)
+                        setEmptyMonth(date.year, date.month + 1)
+
                     }}
                     onDayPress={(date) => {
                         if (month != date.month) {

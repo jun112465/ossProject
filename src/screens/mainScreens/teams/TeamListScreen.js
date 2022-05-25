@@ -24,21 +24,37 @@ const DATA = [
 
 
 const TeamListScreen = ({route, navigation}) => {
-    const [teamList, setTeamList] = useState([])
+    const [teamList, setTeamList] = useState()
 
     useEffect(()=>{
         // getTeamList()
         console.log("TeamListScreen : ", route.params)
         getTeamList()
-    })
+    }, [])
 
     const getTeamList = async () => {
         let data = await fetch(`http:/localhost:8080/team/get?user_id=${userId}`)
         let json = await data.json()
-        console.log(json)
+        console.log(json.teamList)
+        setTeamList(json.teamList)
     }
-    
 
+    const createTeam = (teamName) => {
+        fetch(`http:/localhost:8080/team/add?team_name=${teamName}`)
+            .then(response => response.json())
+    }
+
+    const deleteTeam = (teamId) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                'teamId': teamId,
+            })
+        };
+        fetch('http:/localhost:8080/schedules/add', requestOptions)
+            .then(response => response.json())
+    }
 
     const Item = ({title, id}) => (
         <View style={styles.item}>
@@ -57,28 +73,13 @@ const TeamListScreen = ({route, navigation}) => {
         <Item title={item.teamName} id={item.teamId}/>
     );
 
-    const createTeam = (teamName)=>{
-        fetch(`http:/localhost:8080/team/add?team_name=${teamName}`)
-            .then(response => response.json())
-    }
-
-    const deleteTeam = (teamId)=>{
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                'teamId' : teamId, 
-            })
-        };
-        fetch('http:/localhost:8080/schedules/add', requestOptions)
-            .then(response => response.json())
-    }
+    
 
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
                 style={{flex:1, margin: 7}}
-                data={DATA}
+                data={teamList}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
