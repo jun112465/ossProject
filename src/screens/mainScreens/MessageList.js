@@ -35,7 +35,7 @@ const MessageList = ({userId, navigation}) => {
                 'msgId' : msgId
             })
         };
-        fetch('http:/localhost:8080/schedules/add', requestOptions)
+        fetch('http:/localhost:8080/message/delete', requestOptions)
             .then(response => response.json())
     }
 
@@ -49,7 +49,7 @@ const MessageList = ({userId, navigation}) => {
                 'content' : content
             })
         };
-        fetch('http:/localhost:8080/schedules/add', requestOptions)
+        fetch('http:/localhost:8080/message/add', requestOptions)
             .then(response => response.json())
     }
 
