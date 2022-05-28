@@ -7,21 +7,27 @@ const Separator = () => (
 
 const App = () => (
   <SafeAreaView style={styles.container}>    
-    <Text style={{textAlign:'center', fontSize:30}}>환경설정</Text>
-    <TextInput
-      style={{borderBottomColor: 'black', fontSize:30, textAlign:'center', alignContent:'center'}}
-      placeholder='change nickname'
-    />
-    <Button 
-    title="Change Nickname"
-    />
+    <Text style={{textAlign:'center', fontSize:30, margin: 20}}>개인정보</Text>
+
+    <View style={{margin:20}}> 
+      <View style={{
+        flexDirection:"row",
+      }}>
+        <Text style={styles.infoText}>ID : </Text>
+        <Text style={styles.infoText}>{userId}</Text>
+      </View>
+      <View style={{flexDirection:"row"}}>
+        <Text style={styles.infoText}>NICKNAME : </Text>
+        <Text style={styles.infoText}>{nickname}</Text>
+      </View>
+    </View>
+    
   </SafeAreaView>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     marginHorizontal: 16,
   },
   title: {
@@ -37,6 +43,10 @@ const styles = StyleSheet.create({
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  infoText: {
+    fontSize: 30,
+    textAlign: 'center'
+  }
 });
 
 export default App;

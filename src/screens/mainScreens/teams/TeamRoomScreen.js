@@ -24,17 +24,20 @@ const TeamRoom = ({route, navigation})=>{
     const [first, setFirst] = useState(true)
     const [selectedDate, setSelectedDate] = useState();
     const [schedules, setSchedules] = useState();
+    const [selectedSchedule, setSelectedSchedule] = useState()
 
     // 모달 관련 state
     const [inviteModal, setInviteModal] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
+    const [msgModal, setMsgModal] = useState(false)
 
     // 메뉴 관련
     const [teamMembers, setTeamMembers] = useState()
     const [input, setInput] = useState("")
     const [showMenu, setShowMenu] = useState(false)
     const [left,setLeft] = useState(0)
+    const [selectedMember, setSelectedMember] = useState()
 
     useEffect(()=>{
         // 메뉴 보이게 하기 위한 조건문
@@ -61,7 +64,7 @@ const TeamRoom = ({route, navigation})=>{
         }
         // setEmptyMonth(year, month)
 
-    }, [showMenu, schedules])
+    }, [showMenu, schedules, input])
     // input, showMenu
 
     
@@ -91,8 +94,8 @@ const TeamRoom = ({route, navigation})=>{
         };
         await fetch('http:/localhost:8080/schedule/add', requestOptions)
         let json = await getSchedules()
-        setSchedules(json)
         setLoading(!loading)
+        setSchedules(json)
     }
 
     const getTeamMembers = async ()=>{
@@ -120,6 +123,39 @@ const TeamRoom = ({route, navigation})=>{
         fetch(`http://localhost:8080/message/send`, requestOptions)  
     }
 
+    const sendMessage = async (type)=>{
+        console.log(input)
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                'from': userId,
+                'to': selectedMember,
+                'content': input,
+                'type': type,
+                'teamId': '',
+                'teamName':'' 
+            })
+        };
+        console.log(requestOptions)
+        await fetch(`http://localhost:8080/message/send`, requestOptions)
+    }
+
+    const deleteSchedule = async ()=>{
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id : selectedSchedule
+            })
+        };
+        console.log(requestOptions)
+        await fetch(`http://localhost:8080/schedule/delete`, requestOptions)
+        let json = await getSchedules()
+        setLoading(!loading)
+        setSchedules(json)
+    }
+
     //선택 month의 모든 요일별 빈 아이템 목록 생성
     const setEmptyMonth = async (year, month) => {
         let daysOfMonth = new Date(year, month, 0).getDate()
@@ -140,7 +176,8 @@ const TeamRoom = ({route, navigation})=>{
             <TouchableOpacity
                 style={styles.itemContainer}
                 onPress={() => {
-                    console.log("deleete")
+                    console.log(item)
+                    setSelectedSchedule(item.id)
                     setDeleteModal(!deleteModal)
                 }
                 }>
@@ -161,18 +198,27 @@ const TeamRoom = ({route, navigation})=>{
     const renderTeamMemberItem = ({ item }) => {
         return (
             <TouchableOpacity
-                style={{
-                borderColor: 'black',
-                margin : 10,
-                borderRadius: 20,
-                top: 20,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center"
-            }}>
-                <Icon style={{fontSize: 30, textAlign:"center", marginRight:5}}name={"github"}/>
-                <Text style={{fontSize: 20, textAlignVertical:"center"}}>{item.nickname}</Text>
+                onPress={()=>{
+                    setSelectedMember(item.id)
+                    setMsgModal(!msgModal)
+                }}>
+                <View style={{
+                    borderColor: 'black',
+                    margin: 10,
+                    borderRadius: 20,
+                    top: 20,
+                    flexDirection: "row" ,
+                    alignItems: "center",
+                    justifyContent: "flex-start"
+                }}>
+                    <Icon style={{ fontSize: 30, textAlign: "center", marginRight: 5 }} name={"github"} />
+                    <Text style={{ fontSize: 20, textAlignVertical: "center" }}>{item.nickname}</Text>
+                </View>
+                <View style={{margin: 10}}>
+                    <Text>{item.id}</Text>
+                </View>
             </TouchableOpacity>
+            
         )
     }
 
@@ -267,6 +313,49 @@ const TeamRoom = ({route, navigation})=>{
                     showClosingKnob={true}
                 />
 
+                {/* 멤버에게 메세지 보내기 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={msgModal}
+                    onRequestClose={() => {
+                        setMsgModal(!msgModal)
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Send Message</Text>
+                            <TextInput
+                                numberOfLines={4}
+                                multiline
+                                editable
+                                style={{height:100}}
+                                placeholder="전송할 내용을 입력하세요"
+                                onChangeText={setInput}
+                                value={input}
+                            />
+                            <View style={{ flexDirection: "row" }}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => {
+                                        sendMessage("message")
+                                        setMsgModal(!msgModal)
+                                    }}
+                                >
+                                    <Text style={styles.textStyle}>input</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setMsgModal(!msgModal)}
+                                >
+                                    <Text style={styles.textStyle}>cancel</Text>
+                                </Pressable>
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
+
                 {/* 팀원 초대 모달 */}
                 <Modal
                     animationType="slide"
@@ -324,7 +413,10 @@ const TeamRoom = ({route, navigation})=>{
                     <View style={{ marginTop: "165%", marginBottom: "10%" }}>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => setDeleteModal(!deleteModal)}
+                            onPress={() => {
+                                deleteSchedule()
+                                setDeleteModal(!deleteModal)
+                            }}
                         >
                             <Text style={styles.textStyle}>일정삭제</Text>
                         </Pressable>
