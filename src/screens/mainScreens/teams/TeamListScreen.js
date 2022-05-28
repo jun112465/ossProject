@@ -2,24 +2,34 @@ import React, {useState, useEffect} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, 
     Text, StatusBar, Button, TouchableOpacity, 
     Modal, TextInput, Pressable} from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 const TeamListScreen = ({route, navigation}) => {
     const [teamList, setTeamList] = useState()
     const [createTeamModal, setCreateTeamModal] = useState(false)
     const [input, setInput] = useState()
     const [first, setFirst] = useState(true)
+    const isFocused = useIsFocused()
 
     useEffect(()=>{
-        let a = async ()=>{
+        if(isFocused){
+            setFirst(true)
+        }else{
+            setFirst(true)
+        }
+
+        let a = async () => {
             let json = await getTeamList()
             console.log(json)
             setTeamList(json)
         }
+
         if(first) {
             a()
             setFirst(false)
         }
-    }, [teamList])
+
+    }, [teamList, isFocused])
     
     async function getTeamList(){
         let data = await fetch(`http:/localhost:8080/team/get?user_id=${userId}`)

@@ -32,7 +32,8 @@ export default function MainRouter({route, navigation}) {
                     navigation={navigation}
                 />}
                 options={{
-                    tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />)
+                    tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />),
+                    // unmountOnBlur: Platform.OS === 'ios' ? false : true
                 }}
             />
             <Tab.Screen
@@ -42,7 +43,8 @@ export default function MainRouter({route, navigation}) {
                     navigation={navigation}
                 />}
                 options={{
-                    tabBarIcon: ({ size, color }) => (<Icon name={"envelope"} color={color} size={size} />)
+                    tabBarIcon: ({ size, color }) => (<Icon name={"envelope"} color={color} size={size} />),
+                    // unmountOnBlur: Platform.OS === 'ios' ? false : true
                 }} />
             <Tab.Screen
                 name="Settings"
