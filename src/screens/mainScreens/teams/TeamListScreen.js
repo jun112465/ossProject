@@ -1,47 +1,39 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, 
+    Text, StatusBar, Button, TouchableOpacity, 
+    Modal, TextInput, Pressable} from 'react-native';
+import { create } from 'react-test-renderer';
 import TeamRoom from './TeamRoomScreen';
-// import { Button } from 'react-native-paper';
-
-const DATA = [
-    {
-        teamId: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        teamName: "세계사" 
-    },
-    {
-        teamId: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        teamName: "wefwefwefwef",
-    },
-    {
-        teamId: '58694a0f-3da1-471f-bd96-145571e29d72',
-        teamName: "문쓰발",
-    },
-];
-
-
-
-
 
 const TeamListScreen = ({route, navigation}) => {
     const [teamList, setTeamList] = useState()
+    const [createTeamModal, setCreateTeamModal] = useState(false)
+    const [input, setInput] = useState()
+    const [first, setFirst] = useState(true)
 
     useEffect(()=>{
-        // getTeamList()
-        console.log("TeamListScreen : ", route.params)
-        getTeamList()
-    }, [])
-
-    const getTeamList = async () => {
+        let a = async ()=>{
+            let json = await getTeamList()
+            console.log(json)
+            setTeamList(json)
+        }
+        if(first) {
+            a()
+            setFirst(false)
+        }
+    }, [teamList])
+    
+    async function getTeamList(){
         let data = await fetch(`http:/localhost:8080/team/get?user_id=${userId}`)
         let json = await data.json()
-        console.log(json.teamList)
-        setTeamList(json.teamList)
+        return json.teamList
     }
 
-    const createTeam = (teamName) => {
-        fetch(`http:/localhost:8080/team/add?team_name=${teamName}`)
-            .then(response => response.json())
+    const createTeam = async (teamName) => {
+        await fetch(`http:/localhost:8080/team/add?team_name=${teamName}&user_id=${userId}`)
+        let json = await getTeamList()
+        setTeamList(json)
     }
 
     const deleteTeam = (teamId) => {
@@ -77,19 +69,60 @@ const TeamListScreen = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
+
+            <View style={styles.item}>
+                <TouchableOpacity onPress={()=>setCreateTeamModal(!createTeamModal)}>
+                    <Text style={styles.title}>CREATE TEAM</Text>
+                </TouchableOpacity>
+            </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={createTeamModal}
+                onRequestClose={() => {
+                    setCreateTeamModal(!createTeamModal)
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <TextInput
+                            multiline
+                            editable
+                            style={styles.input}
+                            placeholder="생성할 팀명을 입력하시오"
+                            onChangeText={setInput}
+                            value={input}
+                        />
+                        <View style={{ flexDirection: "row" }}>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => {
+                                    createTeam(input)
+                                    setCreateTeamModal(!createTeamModal)
+                                }}
+                            >
+                                <Text style={styles.textStyle}>input</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setCreateTeamModal(!createTeamModal)}
+                            >
+                                <Text style={styles.textStyle}>cancel</Text>
+                            </Pressable>
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+
             <FlatList
                 style={{flex:1, margin: 7}}
                 data={teamList}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
-            
-            <Text
-                style={{flex:1, padding:20, fontSize: 20}}>
-                방장이 만들어 놓은 팀플방에 팀원들을 초대해서 각자의 일정이나 
-                자료를 기입할 수 있는 또 하나의 게시판
-            </Text>
-      
         </SafeAreaView>
 
         
@@ -114,7 +147,57 @@ const styles = StyleSheet.create({
     },
     content: {
         fontSize: 14,
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        margin: 10
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+
+    input: {
+        height: 40,
+        margin: 12,
+        borderBottomWidth: 1,
+        padding: 10,
+      },
+
 });
 
 export default TeamListScreen;

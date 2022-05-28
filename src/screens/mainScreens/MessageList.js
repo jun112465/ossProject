@@ -14,7 +14,7 @@ const MessageList = ({userId, navigation}) => {
         const a = async ()=>{
             let data = await getMessages()
             console.log("messageList :",data)
-            setMsg(data.msgList)
+            setMsg(data)
         }
         a()
     }, [])
@@ -23,7 +23,8 @@ const MessageList = ({userId, navigation}) => {
     const getMessages = async () => {
         const resp = await fetch(`http://localhost:8080/message/get?user_id=${userId}`);
         const json = await resp.json();
-        return json
+        console.log(json)
+        return json.msgList
     }
 
     const deleteMessages = async ()=>{
@@ -78,10 +79,10 @@ const MessageList = ({userId, navigation}) => {
                         <Icon style={{ fontSize: 30, margin: 10 }} name={"group"} />
                         <Text style={{ fontSize: 30, color: 'green', marginTop: 10 }}
                             onPress={() => {
-                                let url = `http://localhost:8080/inviteCode?teamId=${item.teamId}&userId=${userId}`
+                                let url = `http://localhost:8080/team/invite_code?team_id=${item.teamId}&user_id=${userId}`
                                 console.log(url)
-                                Linking.openURL('http://google.com')
-                                navigation.navigate("TeamStack")
+                                Linking.openURL(url)
+                                // navigation.navigate("TeamStack")
                             }}>
                            linkToTeam 
                         </Text>

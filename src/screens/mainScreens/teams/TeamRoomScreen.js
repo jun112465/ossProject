@@ -14,9 +14,10 @@ import { get } from "react-native/Libraries/Utilities/PixelRatio";
 const TeamRoom = ({route, navigation})=>{
     const userId = route.params.userId;
     const teamId = route.params.teamId;
-
+    const teamName = route.params.teamName
     // loading
-    const [loading, setLoading] = useState(true)
+    const [firstLoading, setFirstLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     // 캘린더 관련
     const [month, setMonth] = useState(0)
     const [year, setYear] = useState(0)
@@ -40,34 +41,45 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        if(loading){
-            console.log("TeamRoomScreen")
-            let a = async () => {
-                let data = await getSchedules()
-                let tmData = await getTeamMembers()
-                console.log(tmData)
-                console.log("Schedules :", data)
-                await setSchedules(data)
-                await setTeamMembers(tmData.userList)
-            }
-            setLoading(!loading)
-            a()
+        // if(loading){
+        //     console.log("TeamRoomScreen")
+        //     let a = async () => {
+        //         let data = await getSchedules()
+        //         let tmData = await getTeamMembers()
+        //         console.log(tmData)
+        //         console.log("Schedules :", data)
+        //         await setSchedules(data)
+        //         await setTeamMembers(tmData.userList)
+        //     }
+        //     setLoading(!loading)
+        //     a()
+        // }
+        // setEmptyMonth(year, month)
+
+        let firstFunc = async () => {
+            console.log("teamRoomScreen : firstFunc")
+            let json = await getSchedules()
+            setSchedules(json)
+
+            json = await getTeamMembers()
+            setTeamMembers(json)
+
+            setFirstLoading(!firstLoading)
         }
-        setEmptyMonth(year, month)
+        if(firstLoading){
+            firstFunc()
+        }
 
+        if(loading){
+            setEmptyMonth(year, month)
+            setLoading(!loading)
+        }
+        // setEmptyMonth(year, month)
 
-    }, [showMenu, loading])
+    }, [showMenu, schedules])
     // input, showMenu
 
     
-
-    const addSchedule = ()=>{
-        console.log(selectedDate)
-        tmp = {...items}
-        tmp[selectedDate].push({name:input})
-        setItems(tmp)
-    }
-
     const getProfileImage = async ()=>{
          let profile = await getKakaoProfile()
          console.log("profile image url : " + profile.profileImageUrl)
@@ -80,25 +92,47 @@ const TeamRoom = ({route, navigation})=>{
         return data
     }
 
-    const addSchedule2 = async ()=>{
+    const addSchedule = async (date)=>{
+        console.log(selectedDate)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 'teamId' : teamId, 
                 'userId' : userId, 
-                'content' : content
+                'content' : input,
+                'date' : selectedDate
             })
         };
-        fetch('http:/localhost:8080/schedules/add', requestOptions)
-            .then(response => response.json())
+        await fetch('http:/localhost:8080/schedule/add', requestOptions)
+        let json = await getSchedules()
+        setSchedules(json)
+        setLoading(!loading)
     }
 
     const getTeamMembers = async ()=>{
         const response = await fetch(`http:/localhost:8080/team/get_members?team_id=${teamId}`)
         // const response = await fetch(`http://localhost:8080/team/get_members?team_id=3`)
         const json = await response.json();
-        return json
+        console.log(json.userList)
+        return json.userList
+    }
+
+    const sendInvitation = async ()=>{
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                'from' : userId,
+                'to' : input,
+                'content' : `${teamName} 으로 초대됐습니다. 아래 링크를 통해 팀에 참가할 수 있습니다`,
+                'type' : "inviteLink",
+                'teamId' : teamId,
+                'teamName' : teamName
+            })
+        };
+        console.log(requestOptions)
+        fetch(`http://localhost:8080/message/send`, requestOptions)  
     }
 
     //선택 month의 모든 요일별 빈 아이템 목록 생성
@@ -135,7 +169,6 @@ const TeamRoom = ({route, navigation})=>{
 
     // 일정 추가 모달 렌더링 함수
     const renderModal = (date) => {
-        setSelectedDate(date)
         setModalVisible(!modalVisible)
     }
 
@@ -240,8 +273,11 @@ const TeamRoom = ({route, navigation})=>{
                             setEmptyMonth(date.year, date.month)
                         }
                     }}
-                    onDayLongPress={(day) => {
-                        renderModal(day.dateString)
+                    onDayLongPress={(date) => {
+                        setSelectedDate(date.dateString)
+                        setYear(date.year)
+                        setMonth(date.month)
+                        setModalVisible(!modalVisible)
                     }}
                     showClosingKnob={true}
                 />
@@ -270,6 +306,7 @@ const TeamRoom = ({route, navigation})=>{
                                 <Pressable
                                     style={[styles.button, styles.buttonClose]}
                                     onPress={() => {
+                                        sendInvitation()
                                         setInviteModal(!inviteModal)
                                     }}
                                 >
