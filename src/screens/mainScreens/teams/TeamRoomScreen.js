@@ -41,21 +41,6 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        // if(loading){
-        //     console.log("TeamRoomScreen")
-        //     let a = async () => {
-        //         let data = await getSchedules()
-        //         let tmData = await getTeamMembers()
-        //         console.log(tmData)
-        //         console.log("Schedules :", data)
-        //         await setSchedules(data)
-        //         await setTeamMembers(tmData.userList)
-        //     }
-        //     setLoading(!loading)
-        //     a()
-        // }
-        // setEmptyMonth(year, month)
-
         let firstFunc = async () => {
             console.log("teamRoomScreen : firstFunc")
             let json = await getSchedules()

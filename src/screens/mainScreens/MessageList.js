@@ -82,7 +82,7 @@ const MessageList = ({userId, navigation}) => {
                                 let url = `http://localhost:8080/team/invite_code?team_id=${item.teamId}&user_id=${userId}`
                                 console.log(url)
                                 Linking.openURL(url)
-                                // navigation.navigate("TeamStack")
+                                navigation.navigate("TeamStack")
                             }}>
                            linkToTeam 
                         </Text>

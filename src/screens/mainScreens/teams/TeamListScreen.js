@@ -1,10 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, 
     Text, StatusBar, Button, TouchableOpacity, 
     Modal, TextInput, Pressable} from 'react-native';
-import { create } from 'react-test-renderer';
-import TeamRoom from './TeamRoomScreen';
 
 const TeamListScreen = ({route, navigation}) => {
     const [teamList, setTeamList] = useState()
