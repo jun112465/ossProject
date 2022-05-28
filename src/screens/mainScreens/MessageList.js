@@ -5,19 +5,25 @@ import { SafeAreaView, View, FlatList, StyleSheet,
 import { black } from 'react-native-paper/lib/typescript/src/styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SlideOutDown } from 'react-native-reanimated';
 
 const MessageList = ({userId, navigation}) => {
+    const [loading, setLoading] = useState(true) 
     const [deleteModal, setDeleteModal] = useState(false)
     const [msg, setMsg] = useState()
+    const [selectedMsg, setSelectedMsg] = useState()
 
     useEffect(()=>{
-        const a = async ()=>{
-            let data = await getMessages()
-            console.log("messageList :",data)
-            setMsg(data)
+        if(loading){
+            const a = async () => {
+                let data = await getMessages()
+                console.log("messageList :", data)
+                setMsg(data)
+            }
+            a()
+            setLoading(false)
         }
-        a()
-    }, [])
+    }, [msg])
 
     //영화 5개 불러오는 예제 데이터
     const getMessages = async () => {
@@ -27,35 +33,23 @@ const MessageList = ({userId, navigation}) => {
         return json.msgList
     }
 
-    const deleteMessages = async ()=>{
+    const deleteMessage = async ()=>{
+        console.log("deleteMsg : ", selectedMsg)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                'userId' : userId,
-                'msgId' : msgId
+                id : selectedMsg
             })
         };
-        fetch('http:/localhost:8080/message/delete', requestOptions)
-            .then(response => response.json())
-    }
-
-    const sendMessage = async () => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                'fromId' : fromId,
-                'toId' : toId,
-                'content' : content
-            })
-        };
-        fetch('http:/localhost:8080/message/add', requestOptions)
-            .then(response => response.json())
+        await fetch('http:/localhost:8080/message/delete', requestOptions)
+        let json = await getMessages()
+        setLoading(!loading)
+        setMsg(json)
     }
 
     const touchMessage = (id)=>{
-        setMsg(id)
+        setSelectedMsg(id)
         setDeleteModal(!deleteModal)
     }
 
@@ -63,7 +57,9 @@ const MessageList = ({userId, navigation}) => {
         // 일반 메세지 
         if (item.type == "message") return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={()=>touchMessage(item.msgId)}>
+                <TouchableOpacity onPress={()=>{
+                        touchMessage(item.msgId)
+                    }}>
                     <Text style={styles.title}>From. {item.from}</Text>
                     <Text style={styles.content}>{item.content}</Text>
                 </TouchableOpacity>
@@ -72,7 +68,10 @@ const MessageList = ({userId, navigation}) => {
         // 초대 링크
         else return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={async () => await touchMessage(item.msgId)}>
+                <TouchableOpacity onPress={() => {
+                    console.log(item)
+                    touchMessage(item.id)
+                }}>
                     <Text style={styles.title}>From. {item.from}</Text>
                     <Text style={styles.content}>{item.teamName} 팀으로 초대되었습니다. 아래 링크를 클릭 시 팀에 참여합니다.</Text>
                     <View style={{flexDirection:'row'}}>
@@ -98,38 +97,48 @@ const MessageList = ({userId, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <FlatList
-                style={{flex:1}}
-                data={msg}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-            />
+            <View style={{flex:1}}>
+                <FlatList
+                    style={{ flex: 1 }}
+                    data={msg}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                />
+            </View>
+            
 
             {/* 메세지 삭제 모달 */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={deleteModal}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setDeleteModal(!deleteModal)
-                }}
-            >
-                <View style={{ marginTop: "165%", marginBottom: "10%" }}>
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setDeleteModal(!deleteModal)}
-                    >
-                        <Text style={styles.textStyle}>메세지 삭제</Text>
-                    </Pressable>
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setDeleteModal(!deleteModal)}
-                    >
-                        <Text style={styles.textStyle}>취소</Text>
-                    </Pressable>
-                </View>
-            </Modal>
+            <View style={{flex:1}}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={deleteModal}
+                    onRequestClose={() => {
+                        setDeleteModal(!deleteModal)
+                    }}
+                >
+                    <View style={{ marginTop: "165%", marginBottom: "10%" }}>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                                deleteMessage()
+                                setDeleteModal(!deleteModal)
+                            }}
+                        >
+                            <Text style={styles.textStyle}>메세지 삭제</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                                setDeleteModal(!deleteModal)
+                            }}
+                        >
+                            <Text style={styles.textStyle}>취소</Text>
+                        </Pressable>
+                    </View>
+                </Modal>
+            </View>
+
         </SafeAreaView>
     );
 }

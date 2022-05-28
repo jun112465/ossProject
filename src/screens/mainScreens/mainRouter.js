@@ -17,7 +17,9 @@ export default function MainRouter({route, navigation}) {
         console.log("MainRouter Props :", route.params)
     })
     return (
-        <Tab.Navigator screenOptions={{ headerShown: false}}>
+        <Tab.Navigator 
+        // screenOptions={{ headerShown: false}}
+        >
             {/* <Tab.Screen
                 name="BoardStack"
                 // component={BoardScreen}

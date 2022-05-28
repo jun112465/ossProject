@@ -7,6 +7,9 @@ import { useIsFocused } from '@react-navigation/native';
 const TeamListScreen = ({route, navigation}) => {
     const [teamList, setTeamList] = useState()
     const [createTeamModal, setCreateTeamModal] = useState(false)
+    const [deleteTeamModal, setDeleteTeamModal] = useState(false)
+    const [selectedTeam, setSelectedTeam] = useState()
+
     const [input, setInput] = useState()
     const [first, setFirst] = useState(true)
     const isFocused = useIsFocused()
@@ -43,25 +46,26 @@ const TeamListScreen = ({route, navigation}) => {
         setTeamList(json)
     }
 
-    const deleteTeam = (teamId) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                'teamId': teamId,
-            })
-        };
-        fetch('http:/localhost:8080/schedules/add', requestOptions)
-            .then(response => response.json())
+    const deleteTeam = () => {
+       fetch(`http:/localhost:8080/team/exit?team_id=${selectedTeam}&user_id=${userId}`)
+       setFirst(true)
     }
 
     const Item = ({title, id}) => (
         <View style={styles.item}>
-            <TouchableOpacity onPress={() => { navigation.navigate("TeamRoom", {
-                teamName : title,
-                teamId : id,
-                userId : userId,
-            })}}>
+            <TouchableOpacity 
+                onPress={() => {
+                    navigation.navigate("TeamRoom", {
+                        teamName: title,
+                        teamId: id,
+                        userId: userId,
+                    })
+                }}
+                onLongPress={()=>{
+                    setSelectedTeam(id)
+                    setDeleteTeamModal(!deleteTeamModal)
+                }}
+            >
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.content}>{title}</Text>
             </TouchableOpacity>
@@ -78,7 +82,11 @@ const TeamListScreen = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
 
             <View style={styles.item}>
-                <TouchableOpacity onPress={()=>setCreateTeamModal(!createTeamModal)}>
+                <TouchableOpacity 
+                    onPress={()=>{
+                        setCreateTeamModal(!createTeamModal)
+                    }}
+                >
                     <Text style={styles.title}>CREATE TEAM</Text>
                 </TouchableOpacity>
             </View>
@@ -130,6 +138,33 @@ const TeamListScreen = ({route, navigation}) => {
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={deleteTeamModal}
+                onRequestClose={() => {
+                    setDeleteTeamModal(!deleteTeamModal)
+                }}
+            >
+                <View style={{ marginTop: "165%", marginBottom: "10%" }}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                            deleteTeam()
+                            setDeleteTeamModal(!deleteTeamModal)
+                        }}
+                    >
+                        <Text style={styles.textStyle}>팀 탈퇴</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setDeleteTeamModal(!deleteTeamModal)}
+                    >
+                        <Text style={styles.textStyle}>취소</Text>
+                    </Pressable>
+                </View>
+            </Modal>
         </SafeAreaView>
 
         
