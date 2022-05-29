@@ -17,7 +17,7 @@ const TeamRoom = ({route, navigation})=>{
     const teamName = route.params.teamName
     // loading
     const [firstLoading, setFirstLoading] = useState(true)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     // 캘린더 관련
     const [month, setMonth] = useState(0)
     const [year, setYear] = useState(0)
@@ -57,13 +57,14 @@ const TeamRoom = ({route, navigation})=>{
         if(firstLoading){
             console.log("firstLoad")
             firstFunc()
+            setFirstLoading(false)
         }
 
         if(loading){
+            console.log("loading...")
             setEmptyMonth(year, month)
             setLoading(!loading)
         }
-        // setEmptyMonth(year, month)
 
     }, [showMenu, schedules])
     // input, showMenu
@@ -289,14 +290,14 @@ const TeamRoom = ({route, navigation})=>{
                     renderItem={renderScheduleItem}
                     loadItemsForMonth={async date => {
                         // 처음에 1회만 실행
-                        if (first) {
-                            setMonth(date.month + 1)
-                            setEmptyMonth(date.year, date.month + 1)
-                            setFirst(!first)
-                        }
+                        // if (first) {
+                        //     setMonth(date.month + 1)
+                        //     setEmptyMonth(date.year, date.month + 1)
+                        //     setFirst(!first)
+                        // }
                         setYear(date.year)
-                        setMonth(date.month + 1)
-                        setEmptyMonth(date.year, date.month + 1)
+                        setMonth(date.month)
+                        setEmptyMonth(date.year, date.month)
 
                     }}
                     onDayPress={(date) => {
