@@ -81,7 +81,7 @@ const TeamListScreen = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
 
-            <View style={styles.item}>
+            <View style={styles.createItem}>
                 <TouchableOpacity 
                     onPress={()=>{
                         setCreateTeamModal(!createTeamModal)
@@ -175,6 +175,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: StatusBar.currentHeight || 0,
+    },
+    createItem: {
+        backgroundColor: 'grey',
+        borderRadius: 30,
+        padding: 20,
+        marginVertical: 15,
+        marginHorizontal: 23,
     },
     item: {
         backgroundColor: 'lightgrey',

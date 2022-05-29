@@ -18,7 +18,7 @@ export default function MainRouter({route, navigation}) {
     })
     return (
         <Tab.Navigator 
-        // screenOptions={{ headerShown: false}}
+            screenOptions={{headerShown:false}}
         >
             {/* <Tab.Screen
                 name="BoardStack"

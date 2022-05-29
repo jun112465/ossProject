@@ -55,6 +55,7 @@ const TeamRoom = ({route, navigation})=>{
             setFirstLoading(!firstLoading)
         }
         if(firstLoading){
+            console.log("firstLoad")
             firstFunc()
         }
 
@@ -64,7 +65,7 @@ const TeamRoom = ({route, navigation})=>{
         }
         // setEmptyMonth(year, month)
 
-    }, [showMenu, schedules, input])
+    }, [showMenu, schedules])
     // input, showMenu
 
     
