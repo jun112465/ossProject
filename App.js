@@ -21,7 +21,7 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          // options={{ title: 'Home',}}
+          options={{ title: 'Home',}}
         />
         <Stack.Screen
           name="MainRouter"
@@ -30,7 +30,6 @@ const App = () => {
         />
         <Stack.Screen
           name="Login"
-          // component={Login}
           component={kakaoLogin}
           options={{ title: 'Welcome'}}
         />

@@ -14,10 +14,6 @@ export default ({navigation})=>{
     AsyncStorage.setItem("accessToken", access)
     AsyncStorage.setItem("refreshToken", refresh)
   }
-  const saveUserInfo = (id, nickname)=>{
-    AsyncStorage.setItem("userId", id)
-    AsyncStorage.setItem("userNickname", nickname)
-  }
 
   // 카카오에 로그인 후 토큰 요청
   const signInWithKakao = async ()=> {
@@ -32,17 +28,6 @@ export default ({navigation})=>{
     profile = await getKakaoProfile();
     userId = profile.id
     userNickname = profile.nickname
-    // saveUserInfo(userId, userNickname)
-    console.log(profile)
-    console.log("getProfile : " + userId, userNickname)
-    console.log("profile Image Url : " + profile.profileImageUrl)
-    // AsyncStorage.setItem("userId", profile.id)
-    // AsyncStorage.setItem("userNickName", profile.nickname)
-    // setResult(JSON.stringify(profile))
-    // 1. setState함수는 비동기 함수다
-    // 2. 호출후에 useEffect가 실행된다
-    // await setResult(JSON.stringify(profile))
-
   };
 
   //서버에 회원 정보 전송
@@ -66,7 +51,6 @@ export default ({navigation})=>{
       await signInWithKakao();
       await getProfile();
       await sendData()
-      // await saveUserInfo(profile.id.toString(), profile.nickname)
       
       navigation.navigate("MainRouter", {
         userId : profile.id.toString(),
