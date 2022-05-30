@@ -5,7 +5,6 @@ import SettingsScreen from './SettingsScreen'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import BoardStack from './board/BoardStack';
 import TeamStack from './teams/TeamStack'
 import MessageList from './MessageList'
 
@@ -17,16 +16,11 @@ export default function MainRouter({route, navigation}) {
         console.log("MainRouter Props :", route.params)
     })
     return (
+        // 하단 네비게이터
         <Tab.Navigator 
             screenOptions={{headerShown:false}}
         >
-            {/* <Tab.Screen
-                name="BoardStack"
-                // component={BoardScreen}
-                component={BoardStack}
-                options={{
-                    tabBarIcon: ({size,color}) => (<Icon name={"home"} color={color} size={size}/>)
-                }} /> */}
+            {/* 팀 스택 네비게이션 */}
             <Tab.Screen
                 name="TeamStack"
                 children={()=><TeamStack 
@@ -35,9 +29,9 @@ export default function MainRouter({route, navigation}) {
                 />}
                 options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"group"} color={color} size={size} />),
-                    // unmountOnBlur: Platform.OS === 'ios' ? false : true
                 }}
             />
+            {/* 메세지 리스트 화면 */}
             <Tab.Screen
                 name="MessageList"
                 children={()=><MessageList 
@@ -46,8 +40,8 @@ export default function MainRouter({route, navigation}) {
                 />}
                 options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"envelope"} color={color} size={size} />),
-                    // unmountOnBlur: Platform.OS === 'ios' ? false : true
                 }} />
+            {/* 설정 화면 */}
             <Tab.Screen
                 name="Settings"
                 component={SettingsScreen}

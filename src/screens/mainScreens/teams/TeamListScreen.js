@@ -34,23 +34,27 @@ const TeamListScreen = ({route, navigation}) => {
 
     }, [teamList, isFocused])
     
+    // 팀 목록 불러오기
     async function getTeamList(){
         let data = await fetch(`http:/localhost:8080/team/get?user_id=${userId}`)
         let json = await data.json()
         return json.teamList
     }
 
+    // 팀 생성하기
     const createTeam = async (teamName) => {
         await fetch(`http:/localhost:8080/team/add?team_name=${teamName}&user_id=${userId}`)
         let json = await getTeamList()
         setTeamList(json)
     }
 
+    // 팀 삭제하기
     const deleteTeam = () => {
        fetch(`http:/localhost:8080/team/exit?team_id=${selectedTeam}&user_id=${userId}`)
        setFirst(true)
     }
 
+    // 팀 목록 flatlist item 렌더방식
     const Item = ({title, id}) => (
         <View style={styles.item}>
             <TouchableOpacity 
@@ -72,6 +76,8 @@ const TeamListScreen = ({route, navigation}) => {
 
         </View>
     );
+
+    // 팀 목록 item render
     const renderItem = ({ item }) => (
         <Item title={item.teamName} id={item.teamId}/>
     );
@@ -81,6 +87,7 @@ const TeamListScreen = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
 
+            {/* 팀 생성 버튼 */}
             <View style={styles.createItem}>
                 <TouchableOpacity 
                     onPress={()=>{
@@ -91,6 +98,7 @@ const TeamListScreen = ({route, navigation}) => {
                 </TouchableOpacity>
             </View>
 
+            {/* 팀 생성 모달 */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -101,7 +109,7 @@ const TeamListScreen = ({route, navigation}) => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Text style={styles.modalText}>Create Team</Text>
                         <TextInput
                             multiline
                             editable
@@ -132,6 +140,7 @@ const TeamListScreen = ({route, navigation}) => {
                 </View>
             </Modal>
 
+            {/* 팀 목록 */}
             <FlatList
                 style={{flex:1, margin: 7}}
                 data={teamList}
@@ -139,6 +148,7 @@ const TeamListScreen = ({route, navigation}) => {
                 keyExtractor={item => item.id}
             />
 
+            {/* 팀 삭제 모달 */}
             <Modal
                 animationType="slide"
                 transparent={true}

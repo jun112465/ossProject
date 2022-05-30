@@ -69,12 +69,7 @@ const TeamRoom = ({route, navigation})=>{
     }, [showMenu, schedules])
     // input, showMenu
 
-    
-    const getProfileImage = async ()=>{
-         let profile = await getKakaoProfile()
-         console.log("profile image url : " + profile.profileImageUrl)
-    }
-
+    // 팀의 모든 일정 가져오기
     const getSchedules = async ()=>{
         const response = await fetch(`http:/localhost:8080/schedule/get?team_id=${teamId}`)
         const data = await response.json()
@@ -82,6 +77,7 @@ const TeamRoom = ({route, navigation})=>{
         return data
     }
 
+    // 일정 추가
     const addSchedule = async (date)=>{
         console.log(selectedDate)
         const requestOptions = {
@@ -100,14 +96,15 @@ const TeamRoom = ({route, navigation})=>{
         setSchedules(json)
     }
 
+    // 팀 멤버 불러오기
     const getTeamMembers = async ()=>{
         const response = await fetch(`http:/localhost:8080/team/get_members?team_id=${teamId}`)
-        // const response = await fetch(`http://localhost:8080/team/get_members?team_id=3`)
         const json = await response.json();
         console.log(json.userList)
         return json.userList
     }
 
+    // 초대코드 보내기
     const sendInvitation = async ()=>{
         const requestOptions = {
             method: 'POST',
@@ -125,6 +122,7 @@ const TeamRoom = ({route, navigation})=>{
         fetch(`http://localhost:8080/message/send`, requestOptions)  
     }
 
+    // 메세지 보내기
     const sendMessage = async (type)=>{
         console.log(input)
         const requestOptions = {
@@ -143,6 +141,7 @@ const TeamRoom = ({route, navigation})=>{
         await fetch(`http://localhost:8080/message/send`, requestOptions)
     }
 
+    // 스케쥴 삭제
     const deleteSchedule = async ()=>{
         const requestOptions = {
             method: 'POST',
@@ -369,7 +368,7 @@ const TeamRoom = ({route, navigation})=>{
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
+                            <Text style={styles.modalText}>Invite Friend!</Text>
                             <TextInput
                                 multiline
                                 editable
@@ -443,7 +442,7 @@ const TeamRoom = ({route, navigation})=>{
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
+                            <Text style={styles.modalText}>Add Schedule</Text>
                             <TextInput
                                 multiline
                                 editable

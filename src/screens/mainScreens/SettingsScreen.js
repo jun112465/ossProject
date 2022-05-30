@@ -1,10 +1,6 @@
 import React from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 
-const Separator = () => (
-  <View style={styles.separator} />
-);
-
 const App = () => (
   <SafeAreaView style={styles.container}>    
     <Text style={{textAlign:'center', fontSize:30, margin: 20}}>개인정보</Text>
