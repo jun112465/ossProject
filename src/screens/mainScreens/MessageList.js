@@ -86,7 +86,7 @@ const MessageList = ({userId, navigation}) => {
                                 console.log(url)
                                 Linking.openURL(url)
                             }}>
-                           linkToTeam 
+                           Link to team 
                         </Text>
                     </View>
                 </TouchableOpacity>

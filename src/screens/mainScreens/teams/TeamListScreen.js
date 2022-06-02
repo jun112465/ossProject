@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     createItem: {
-        backgroundColor: 'grey',
+        backgroundColor: 'skyblue',
         borderRadius: 30,
         padding: 20,
         marginVertical: 15,

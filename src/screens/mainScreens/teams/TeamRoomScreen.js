@@ -234,7 +234,7 @@ const TeamRoom = ({route, navigation})=>{
 
                 <View style={{margin: 10}}>
                     <Text style={{ marginHorizontal: 10, fontSize: 16, fontWeight: "bold" }}>- TeamName</Text>
-                    <Text style={{ fontSize: 30, padding: 10, borderBottomWidth: 1 }}>
+                    <Text style={{ fontSize: 20, padding: 10, borderBottomWidth: 1 }}>
                         {route.params.teamName}
                     </Text>
                 </View>
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         backgroundColor: 'white',
-        borderColor: 'black',
+        borderColor: 'skyblue',
         borderWidth: 1,
         margin: 5,
         borderRadius: 15,
