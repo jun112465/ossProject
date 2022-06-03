@@ -47,8 +47,8 @@ const TeamListScreen = ({route, navigation}) => {
     }
 
     // 팀 삭제하기
-    const deleteTeam = () => {
-       fetch(`http:/localhost:8080/team/exit?team_id=${selectedTeam}&user_id=${userId}`)
+    const deleteTeam = async () => {
+       await fetch(`http:/localhost:8080/team/exit?team_id=${selectedTeam}&user_id=${userId}`)
        setFirst(true)
     }
 
@@ -159,8 +159,13 @@ const TeamListScreen = ({route, navigation}) => {
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
-                            deleteTeam()
-                            setDeleteTeamModal(!deleteTeamModal)
+                            (async function(){
+                                deleteTeam()
+                                setDeleteTeamModal(!deleteTeamModal)
+                                let json = getTeamList()
+                                setTeamList(json)
+
+                            })()
                         }}
                     >
                         <Text style={styles.textStyle}>팀 탈퇴</Text>

@@ -43,13 +43,11 @@ const TeamRoom = ({route, navigation})=>{
         if(loading){
             // console.log("useEffect")
             (async function () {
-                console.log("useEffect function")
                 // statements
                 let teamJson = await getTeamMembers()
                 setTeamMembers(teamJson)
 
                 let scheduleJson = await getSchedules()
-                console.log(scheduleJson)
                 setSchedules(scheduleJson)
 
                 setLoading(!loading)
@@ -144,8 +142,8 @@ const TeamRoom = ({route, navigation})=>{
         };
         console.log(requestOptions)
         await fetch(`http://localhost:8080/schedule/delete`, requestOptions)
-        let json = await getSchedules()
         setLoading(!loading)
+        let json = getSchedules()
         setSchedules(json)
     }
 
