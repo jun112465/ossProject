@@ -3,13 +3,8 @@ import {
     Text, SafeAreaView, View, StyleSheet, Modal, Pressable, 
     TextInput, TouchableOpacity, FlatList
 } from "react-native";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+import { Agenda } from "react-native-calendars";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IconEntypo from 'react-native-vector-icons/Entypo';
-import {KakaoOAuthToken, login, getProfile as getKakaoProfile, getAccessToken} from "@react-native-seoul/kakao-login"
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { black, white } from "react-native-paper/lib/typescript/src/styles/colors";
-import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 const TeamRoom = ({route, navigation})=>{
     const userId = route.params.userId;
@@ -44,27 +39,24 @@ const TeamRoom = ({route, navigation})=>{
         if(showMenu) setLeft(170)
         else setLeft(0)
 
-        let firstFunc = async () => {
-            console.log("teamRoomScreen : firstFunc")
-            let json = await getSchedules()
-            setSchedules(json)
-
-            json = await getTeamMembers()
-            setTeamMembers(json)
-
-            setFirstLoading(!firstLoading)
-        }
-        if(firstLoading){
-            console.log("firstLoad")
-            firstFunc()
-            setFirstLoading(false)
-        }
-
+        // useEffect first, loadItemsForMonth
         if(loading){
-            console.log("loading...")
-            setEmptyMonth(year, month)
-            setLoading(!loading)
+            // console.log("useEffect")
+            (async function () {
+                console.log("useEffect function")
+                // statements
+                let teamJson = await getTeamMembers()
+                setTeamMembers(teamJson)
+
+                let scheduleJson = await getSchedules()
+                console.log(scheduleJson)
+                setSchedules(scheduleJson)
+
+                setLoading(!loading)
+                setEmptyMonth(year,month)
+            })()
         }
+        
 
     }, [showMenu, schedules])
     // input, showMenu
@@ -289,15 +281,22 @@ const TeamRoom = ({route, navigation})=>{
                     renderItem={renderScheduleItem}
                     loadItemsForMonth={async date => {
                         // 처음에 1회만 실행
-                        // if (first) {
-                        //     setMonth(date.month + 1)
-                        //     setEmptyMonth(date.year, date.month + 1)
-                        //     setFirst(!first)
-                        // }
-                        setYear(date.year)
-                        setMonth(date.month)
-                        setEmptyMonth(date.year, date.month)
-
+                        if (first) {
+                            (async function(){
+                                // let json = await getSchedules() 
+                                // console.log(json)
+                                // await setSchedules(json)
+                                console.log("loadItemsForMonth")
+                                await setYear(date.year)
+                                await setMonth(date.month)
+                                await setEmptyMonth(date.year, date.month)
+                                await setFirst(!first)
+                            })()
+                            
+                        }
+                        // setYear(date.year)
+                        // setMonth(date.month)
+                        // setEmptyMonth(date.year, date.month)
                     }}
                     onDayPress={(date) => {
                         if (month != date.month) {

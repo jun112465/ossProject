@@ -21,14 +21,12 @@ const TeamListScreen = ({route, navigation}) => {
             setFirst(true)
         }
 
-        let a = async () => {
-            let json = await getTeamList()
-            console.log(json)
-            setTeamList(json)
-        }
-
         if(first) {
-            a()
+            (async function(){
+                let json = await getTeamList()
+                console.log(json)
+                setTeamList(json)
+            })()
             setFirst(false)
         }
 
