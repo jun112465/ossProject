@@ -10,9 +10,7 @@ Spring-boot를 이용해 서버를 만들었다.
 아래 주소는 스프링부트를 이용한 서버 코드를 가지고 있다.
 https://github.com/jun112465/ossProjectServer
 
-# 주요 기능
-1. 로그인 및 회원가입
-2. 팀 생성 
-3. 일정 추가/삭제
-4. 쪽지 기능
+
+# 앱에 대한 ppt
+https://docs.google.com/presentation/d/1wcRnUHmOfYGp5_3FPZl430bbNvOMQqhqBFPH-qyR_EM/edit
 
